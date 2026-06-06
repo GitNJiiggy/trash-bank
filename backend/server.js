@@ -7,7 +7,13 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const isVercel = process.env.VERCEL === '1';
 const API_KEY = process.env.TRASHBANK_API_KEY || 'demo-key-please-change';
+
+// Vercel serverless exports
+if (isVercel) {
+  module.exports = app;
+}
 
 // Rate limiting
 const limiter = rateLimit({
@@ -347,12 +353,20 @@ app.post('/api/webhooks/mcclaw', async (req, res) => {
 
 // Serve frontend
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../docs/index.html'));
+  // On Vercel, serve static docs
+  if (isVercel) {
+    res.sendFile(path.join(__dirname, '../docs/index.html'));
+  } else {
+    res.sendFile(path.join(__dirname, '../docs/index.html'));
+  }
 });
 
-app.listen(PORT, () => {
-  console.log(`🗑️ Trash Bank API running on port ${PORT}`);
-  console.log(`📊 Health: http://localhost:${PORT}/api/health`);
-  console.log(`🔗 McClaw API: ${MCCLAW_API_URL}`);
-  console.log(`🔒 Security: CORS restricted, rate limiting enabled`);
-});
+// Only listen on non-Vercel environments
+if (!isVercel) {
+  app.listen(PORT, () => {
+    console.log(`🗑️ Trash Bank API running on port ${PORT}`);
+    console.log(`📊 Health: http://localhost:${PORT}/api/health`);
+    console.log(`🔗 McClaw API: ${MCCLAW_API_URL}`);
+    console.log(`🔒 Security: CORS restricted, rate limiting enabled`);
+  });
+}

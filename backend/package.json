@@ -1,5 +1,5 @@
 {
-  "name": "trash-bank-backend",
+  "name": "trash-bank-api",
   "version": "1.0.0",
   "description": "Trash Bank API - McClaw Integration",
   "main": "server.js",
@@ -8,11 +8,11 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "node-fetch": "^2.7.0",
     "ethers": "^6.9.0",
-    "express": "^4.18.2",
-    "express-rate-limit": "^7.5.1",
-    "node-fetch": "^2.7.0"
+    "express-rate-limit": "^7.1.5"
   }
 }
