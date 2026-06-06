@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Bank Whitepaper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #0d0d0d;
+            --bg-elevated: #141414;
+            --border: #1f1f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-muted: #525252;
+            --accent: #00ff88;
+            --accent-dim: #00cc6a;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-primary); line-height: 1.7; }
+        
+        .nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(5,5,5,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-logo-img { width: 32px; height: 32px; border-radius: 8px; }
+        .nav-logo-text { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; }
+        .nav-link:hover { color: var(--accent); }
+        .nav-link.active { color: var(--accent); }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 120px 32px 80px; }
+        
+        h1 { font-size: clamp(32px, 5vw, 56px); font-weight: 900; margin-bottom: 16px; background: linear-gradient(135deg, #fff 0%, #00ff88 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .tagline { font-size: 18px; color: var(--accent); margin-bottom: 48px; }
+        
+        h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 800; margin: 64px 0 24px; color: var(--accent); padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+        h3 { font-size: 22px; font-weight: 700; margin: 40px 0 16px; color: var(--text-primary); }
+        h4 { font-size: 18px; font-weight: 600; margin: 32px 0 12px; color: var(--text-secondary); }
+        
+        p { margin-bottom: 16px; color: var(--text-secondary); font-size: 16px; line-height: 1.8; }
+        
+        ul, ol { margin: 20px 0; padding-left: 28px; color: var(--text-secondary); }
+        li { margin-bottom: 12px; font-size: 16px; }
+        
+        .highlight { background: linear-gradient(135deg, rgba(0,255,136,0.08) 0%, var(--bg-card) 100%); border: 2px solid var(--accent); border-radius: 16px; padding: 32px; margin: 32px 0; }
+        .highlight-title { font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+        
+        .highlight ul { margin: 12px 0; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 15px; }
+        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        td { color: var(--text-secondary); }
+        td:first-child { color: var(--text-primary); font-weight: 600; }
+        tr:hover td { background: rgba(0,255,136,0.03); }
+        
+        code { background: var(--bg-card); padding: 2px 8px; border-radius: 4px; font-family: monospace; color: var(--accent); }
+        
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,255,136,0.3); }
+        
+        .nav-back { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); text-decoration: none; font-size: 14px; margin-bottom: 32px; }
+        .nav-back:hover { color: var(--accent); }
+        
+        @media (max-width: 768px) {
+            .container { padding: 100px 20px 60px; }
+            h1 { font-size: 32px; }
+            h2 { font-size: 24px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="demo.html" class="nav-logo">
+            <img src="logo.png" class="nav-logo-img" alt="Trash Bank">
+            <span class="nav-logo-text">Trash Bank</span>
+        </a>
+        <div class="nav-links">
+            <a href="demo.html#problem" class="nav-link">Problem</a>
+            <a href="demo.html#solution" class="nav-link">Solution</a>
+            <a href="demo.html#tokenomics" class="nav-link">Tokenomics</a>
+            <a href="whitepaper.html" class="nav-link" style="color: var(--accent);">Whitepaper</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="demo.html" class="nav-back">← Back to Demo</a>
+        
+        <h1>Trash Bank Whitepaper</h1>
+        <p class="tagline">Clean Communities, Built From the Ground Up</p>
+
+        <h2>1. Executive Summary</h2>
+        <p>Trash Bank is a <strong>community-owned protocol</strong> that rewards verified cleanup work with tradeable tokens and on-chain reputation. Unlike existing solutions, Trash Bank:</p>
+        <ul>
+            <li><strong>Is independent</strong> — not dependent on any single platform</li>
+            <li><strong>Includes everyone</strong> — works for non-crypto users via vending machines</li>
+            <li><strong>Is democratically governed</strong> — quadratic voting by contributors, not whales</li>
+            <li><strong>Is fairly launched</strong> — zero team allocation, all tokens earned through work</li>
+        </ul>
+
+        <h2>2. The Problem</h2>
+        
+        <h3>2.1 Global Waste Crisis</h3>
+        <p>The world generates <strong>2.1 billion tons of waste annually</strong>. Cities and municipalities bear the financial burden of cleanup, with the US alone spending over $11 billion annually on public space maintenance.</p>
+
+        <h3>2.2 Excluded Populations</h3>
+        <p><strong>580,000+ individuals</strong> experience homelessness in the US (2024). Many want to contribute but lack economic pathways. Traditional apps require smartphones, bank accounts, and internet access—creating barriers to participation.</p>
+
+        <h3>2.3 Existing Solutions Are Incomplete</h3>
+        <p>Current cleanup platforms are:</p>
+        <ul>
+            <li><strong>Centralized</strong> — no community governance (Plastic Bank, ZeLoop)</li>
+            <li><strong>Narrow in scope</strong> — plastic bottles only (ZeLoop, PETCOIN)</li>
+            <li><strong>B2B focused</strong> — no consumer pathway (Plastiks, Empower)</li>
+            <li><strong>Exclusive</strong> — require smartphones and crypto wallets</li>
+        </ul>
+
+        <h2>3. Competitive Differentiation</h2>
+
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Plastic Bank</th>
+                <th>ZeLoop</th>
+                <th>Trash Bank</th>
+            </tr>
+            <tr>
+                <td>Governance</td>
+                <td>None</td>
+                <td>None</td>
+                <td><strong>DAO</strong></td>
+            </tr>
+            <tr>
+                <td>Tradeable Token</td>
+                <td>No</td>
+                <td>No</td>
+                <td><strong>Yes (TTKN)</strong></td>
+            </tr>
+            <tr>
+                <td>Homeless Inclusion</td>
+                <td>No</td>
+                <td>No</td>
+                <td><strong>Vending Cards</strong></td>
+            </tr>
+            <tr>
+                <td>Waste Types</td>
+                <td>Plastic</td>
+                <td>Bottles</td>
+                <td><strong>All types</strong></td>
+            </tr>
+            <tr>
+                <td>Wallet Required</td>
+                <td>No</td>
+                <td>Yes</td>
+                <td><strong>No</strong></td>
+            </tr>
+        </table>
+
+        <h3>3.1 The McClaw Enhancement</h3>
+        <p>Trash Bank integrates with <strong>McClaw</strong>, an existing task escrow and agent verification platform. This means:</p>
+        <div class="highlight">
+            <div class="highlight-title">What McClaw Provides</div>
+            <ul>
+                <li>Task escrow and management</li>
+                <li>Agent verification network</li>
+                <li>On-chain token distribution (MCLAW)</li>
+                <li>Reputation infrastructure</li>
+            </ul>
+        </div>
+        <div class="highlight">
+            <div class="highlight-title">What Trash Bank Adds</div>
+            <ul>
+                <li>4-photo GPS verification system</li>
+                <li>Trash Coins (database tokens)</li>
+                <li>Garbage Cans (soulbound reputation NFTs)</li>
+                <li>Quadratic voting DAO</li>
+                <li>Vending machine network for unbanked</li>
+                <li>Homeless inclusion pathway</li>
+            </ul>
+        </div>
+        <p><strong>But Trash Bank is standalone</strong> — any task platform can integrate. McClaw makes it easier, but is not required.</p>
+
+        <h2>4. Tokenomics</h2>
+
+        <h3>4.1 Three-Tier Token System</h3>
+        <table>
+            <tr>
+                <th>Tier</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><strong>Trash Coins</strong></td>
+                <td>Database (off-chain)</td>
+                <td>Non-crypto users, vending redemption</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><strong>Trash Tokens (TTKN)</strong></td>
+                <td>ERC-20 on Base</td>
+                <td>Trading, staking, DEX liquidity</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><strong>Garbage Cans</strong></td>
+                <td>Soulbound NFT</td>
+                <td>Reputation, voting power, validator status</td>
+            </tr>
+        </table>
+
+        <h3>4.2 Why Soulbound Reputation?</h3>
+        <p>In most DAOs, whales buy influence. Trash Bank prevents this: <strong>Garbage Cans cannot be bought or transferred</strong>. They can only be earned through verified cleanup work. Voting power is calculated as:</p>
+        <p style="text-align: center; font-size: 20px; margin: 24px 0;"><code>Voting Power = √(Garbage Cans)</code></p>
+        <p>This creates <strong>quadratic voting</strong> — a community member with 100 Garbage Cans gets 10 votes, while someone with 10,000 Garbage Cans gets 100 votes. Influence through contribution, not wealth.</p>
+
+        <h3>4.3 Supply Distribution</h3>
+        <table>
+            <tr>
+                <th>Allocation</th>
+                <th>Percentage</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Liquidity Pool</td>
+                <td>5%</td>
+                <td>DEX bootstrapping on Base</td>
+            </tr>
+            <tr>
+                <td>Community Treasury</td>
+                <td>5%</td>
+                <td>Development, marketing, partnerships (governed by DAO)</td>
+            </tr>
+            <tr>
+                <td>Work-Earned</td>
+                <td>90%</td>
+                <td>Distributed through validated cleanup tasks</td>
+            </tr>
+            <tr>
+                <td>Team/Founders</td>
+                <td>0%</td>
+                <td>None. Founders earn tokens through work.</td>
+            </tr>
+        </table>
+
+        <h3>4.4 Why Work-Based Fair Launch Works</h3>
+        <p>Trash Bank starts with 5% liquidity pool + 5% treasury. The remaining 90% must be earned through verified work. This is not "zero supply" — it's <strong>"zero free allocation."</strong> Everyone, including founders, must earn tokens through contribution.</p>
+
+        <h3>4.5 Inflation Control</h3>
+        <ul>
+            <li><strong>Annual cap:</strong> 10% maximum inflation</li>
+            <li><strong>Dynamic adjustment:</strong> If cap is reached, per-task rewards decrease</li>
+            <li><strong>Burn mechanism:</strong> Tokens burned on vending machine redemption</li>
+        </ul>
+
+        <h2>5. Proof of Work System</h2>
+
+        <h3>5.1 Task Flow</h3>
+        <ol>
+            <li><strong>Find Task</strong> — Browse cleanup tasks on McClaw or integrated platform</li>
+            <li><strong>Accept Task</strong> — Task escrow locks payment (MCLAW)</li>
+            <li><strong>Complete Work</strong> — Clean designated area</li>
+            <li><strong>Submit Proof</strong> — Upload 4 photos with GPS and timestamps:
+                <ul>
+                    <li>Before: area condition</li>
+                    <li>Collected: trash in bags</li>
+                    <li>After: cleaned area</li>
+                    <li>Disposal: trash in bin</li>
+                </ul>
+            </li>
+            <li><strong>Validation</strong> — McClaw agent or high-karma community member approves</li>
+            <li><strong>Earn Rewards</strong> — Receive MCLAW + Trash Coins + Garbage Cans</li>
+        </ol>
+
+        <h3>5.2 Anti-Gaming Measures</h3>
+        <ul>
+            <li><strong>GPS geofencing</strong> — Photos must be taken at task location</li>
+            <li><strong>Timestamp verification</strong> — EXIF data must match submission time</li>
+            <li><strong>Visual comparison</strong> — Before/after must show real change</li>
+            <li><strong>Stake slashing</strong> — Validators lose reputation for approving fake submissions</li>
+            <li><strong>Progressive trust</strong> — New users require multiple validations; high-karma users get auto-approval</li>
+        </ul>
+
+        <h2>6. Governance (DAO)</h2>
+
+        <h3>6.1 Trash Masters</h3>
+        <p>Elected community members who distribute weekly budgets to sub-communities:</p>
+        <ul>
+            <li><strong>Election cycle:</strong> Every 2 weeks</li>
+            <li><strong>Requirements:</strong> Minimum Garbage Cans threshold, active participation</li>
+            <li><strong>Powers:</strong> Budget allocation, sub-community approval, proposal veto</li>
+            <li><strong>Limitations:</strong> Cannot modify tokenomics, cannot mint tokens, cannot access treasury alone</li>
+        </ul>
+
+        <h3>6.2 Sub-Communities</h3>
+        <p>Neighborhood or district-level groups that propose local cleanup priorities:</p>
+        <ul>
+            <li>Formed by 10+ members with Garbage Cans</li>
+            <li>Propose budget allocations for their area</li>
+            <li>Vote on local priorities</li>
+        </ul>
+
+        <h3>6.3 Quadratic Voting</h3>
+        <p>Voting power is the square root of Garbage Cans held:</p>
+        <table>
+            <tr>
+                <th>Garbage Cans</th>
+                <th>Voting Power</th>
+            </tr>
+            <tr><td>1</td><td>1</td></tr>
+            <tr><td>10</td><td>3</td></tr>
+            <tr><td>100</td><td>10</td></tr>
+            <tr><td>1,000</td><td>31</td></tr>
+            <tr><td>10,000</td><td>100</td></tr>
+        </table>
+        <p>This prevents whale dominance: buying 100x more tokens only gives 10x more votes.</p>
+
+        <h2>7. Homeless Inclusion</h2>
+
+        <h3>7.1 The Problem</h3>
+        <p>Traditional crypto platforms require smartphones, bank accounts, and internet access. Homeless individuals are excluded from economic participation.</p>
+
+        <h3>7.2 The Solution: Trash Bank Cards</h3>
+        <ul>
+            <li><strong>NFC/QR Code Card</strong> — Like a transit card, tied to on-chain identity</li>
+            <li><strong>Task Assignment</strong> — Via SMS, simple flip phone, or community liaison</li>
+            <li><strong>Photo Submission</strong> — Community center kiosks or partner locations</li>
+            <li><strong>Token Balance</strong> — Stored on-chain, accessed via card</li>
+            <li><strong>Redemption</strong> — Vending machines for essentials (food, hygiene products)</li>
+        </ul>
+
+        <h3>7.3 Vending Machines</h3>
+        <p>Trash Bank vending machines accept Trash Coins or TTKN:</p>
+        <ul>
+            <li>Essentials: food, water, hygiene products</li>
+            <li>Partner locations: shelters, community centers</li>
+            <li>Geo-locked to prevent exploitation</li>
+        </ul>
+
+        <h2>8. Use Cases</h2>
+
+        <h3>8.1 Community Cleanup</h3>
+        <p>Residents earn by cleaning their own neighborhoods. Municipalities lower costs while engaging citizens.</p>
+
+        <h3>8.2 Event Cleanup</h3>
+        <p>Post-concert, festival, sports events. Higher rewards for rapid turnaround.</p>
+
+        <h3>8.3 Corporate CSR</h3>
+        <p>Companies sponsor cleanups for ESG reporting. Employees participate for team-building.</p>
+
+        <h3>8.4 Homeless Economic Inclusion</h3>
+        <p>Primary use case: vending machines for essentials. No smartphone or bank required.</p>
+
+        <h2>9. Roadmap</h2>
+
+        <table>
+            <tr>
+                <th>Phase</th>
+                <th>Timeline</th>
+                <th>Focus</th>
+            </tr>
+            <tr>
+                <td><strong>1</strong></td>
+                <td>Month 1-2</td>
+                <td>Build infrastructure (database, API, photo verification)</td>
+            </tr>
+            <tr>
+                <td><strong>2</strong></td>
+                <td>Month 2-3</td>
+                <td>Test with McClaw (10-50 users, manual validation)</td>
+            </tr>
+            <tr>
+                <td><strong>3</strong></td>
+                <td>Month 3-4</td>
+                <td>Modify infrastructure based on pilot feedback</td>
+            </tr>
+            <tr>
+                <td><strong>4</strong></td>
+                <td>Month 4-6</td>
+                <td>Launch program (500+ users, vending machine pilot)</td>
+            </tr>
+            <tr>
+                <td><strong>5</strong></td>
+                <td>Month 6-9</td>
+                <td>Develop DAO (Garbage Cans NFT, voting, sub-communities)</td>
+            </tr>
+            <tr>
+                <td><strong>6</strong></td>
+                <td>Month 9-12</td>
+                <td>Launch DAO (first election, community governance active)</td>
+            </tr>
+        </table>
+
+        <h2>10. Technical Architecture</h2>
+
+        <h3>10.1 Blockchain Layer</h3>
+        <ul>
+            <li><strong>Chain:</strong> Base (Ethereum L2, low fees, fast finality)</li>
+            <li><strong>TTKN Contract:</strong> ERC-20 on Base</li>
+            <li><strong>Garbage Cans Contract:</strong> ERC-721 (soulbound, non-transferable)</li>
+        </ul>
+
+        <h3>10.2 Database Layer</h3>
+        <ul>
+            <li><strong>Trash Coins:</strong> Off-chain database (PostgreSQL)</li>
+            <li><strong>Task Records:</strong> Photos, GPS, timestamps</li>
+            <li><strong>Reputation:</strong> Garbage Cans sync on-chain</li>
+        </ul>
+
+        <h3>10.3 Vending Machine Layer</h3>
+        <ul>
+            <li><strong>NFC Reader:</strong> Reads Trash Bank Card</li>
+            <li><strong>Balance Check:</strong> Queries database</li>
+            <li><strong>Dispense:</strong> Burns tokens, releases product</li>
+        </ul>
+
+        <h2>11. Conclusion</h2>
+        <p>Trash Bank creates <strong>economic pathways from waste</strong>:</p>
+        <ul>
+            <li>For crypto-native users: TTKN on Base</li>
+            <li>For non-crypto users: Trash Coins in database</li>
+            <li>For everyone: Garbage Cans reputation</li>
+            <li>For governance: Quadratic voting by contributors</li>
+        </ul>
+        <p>The protocol is <strong>standalone</strong> but <strong>enhanced by McClaw</strong> — any task platform can integrate. The more platforms, the more tasks, the more cleanup.</p>
+        <p style="margin-top: 32px;"><strong>Clean communities, built from the ground up.</strong></p>
+
+        <div style="margin-top: 64px; text-align: center;">
+            <a href="demo.html" class="btn btn-primary">Back to Demo</a>
+        </div>
+    </div>
+</body>
+</html>

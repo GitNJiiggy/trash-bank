@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Bank — Turn Litter Into Social Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #0d0d0d;
+            --bg-elevated: #141414;
+            --bg-gradient: linear-gradient(135deg, #0a0a0a 0%, #050505 100%);
+            --border: #1f1f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-muted: #525252;
+            --accent: #00ff88;
+            --accent-dim: #00cc6a;
+            --accent-glow: rgba(0, 255, 136, 0.15);
+            --warning: #ffaa00;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-primary); line-height: 1.6; }
+        
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 80px 20px 40px; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.2) 0%, transparent 60%); }
+        .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, var(--bg-dark), transparent); }
+        
+        .hero-content { position: relative; z-index: 1; max-width: 900px; }
+        .brand-header { font-size: 14px; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 12px; margin-bottom: 24px; opacity: 0.9; }
+        .mascot-img { width: 180px; height: 180px; border-radius: 50%; border: 4px solid var(--accent); box-shadow: 0 0 80px rgba(0,255,136,0.5); margin-bottom: 32px; animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        .tagline { font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 20px; }
+        .hero-title { font-size: clamp(36px, 8vw, 72px); font-weight: 900; line-height: 1.05; margin-bottom: 24px; background: linear-gradient(135deg, #fff 0%, #00ff88 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero-subtitle { font-size: 20px; color: var(--text-secondary); margin-bottom: 40px; max-width: 650px; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px; border-radius: 12px; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(0,255,136,0.4); }
+        .btn-secondary { background: transparent; color: var(--text-primary); border: 2px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--accent); background: rgba(0,255,136,0.05); }
+        .cta-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        
+        .nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(5,5,5,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .nav-logo-img { width: 32px; height: 32px; border-radius: 8px; }
+        .nav-logo-text { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover { color: var(--accent); }
+        
+        /* Section styling */
+        .section { padding: 120px 32px; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 64px; }
+        .section-tag { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 16px; display: inline-block; padding: 8px 16px; background: rgba(0,255,136,0.1); border-radius: 100px; }
+        .section-title { font-size: clamp(32px, 5vw, 56px); font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+        .section-desc { font-size: 18px; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
+        
+        .section-dark { background: var(--bg-card); }
+        .section-split { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .section-split.reverse { direction: rtl; }
+        .section-split.reverse > * { direction: ltr; }
+        
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto; max-width: 800px; }
+        
+        /* Cards */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,255,136,0.05) 0%, transparent 100%); opacity: 0; transition: opacity 0.3s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .card:hover::before { opacity: 1; }
+        .card-icon { font-size: 48px; margin-bottom: 20px; }
+        .card-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+        .card-desc { color: var(--text-secondary); font-size: 15px; line-height: 1.7; }
+        
+        /* Token cards */
+        .token-card { background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%); border: 2px solid var(--accent); border-radius: 24px; padding: 40px 32px; position: relative; }
+        .token-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%); animation: rotate 20s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .token-card-content { position: relative; z-index: 1; }
+        .token-emoji { font-size: 64px; margin-bottom: 20px; }
+        .token-name { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .token-tier { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .token-details { color: var(--text-secondary); font-size: 15px; line-height: 1.8; }
+        .token-details strong { color: var(--text-primary); }
+        
+        /* Images */
+        .workflow-img { width: 100%; border-radius: 20px; margin: 48px 0; box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
+        
+        /* Stats */
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin: 48px 0; }
+        .stat { text-align: center; padding: 32px; background: var(--bg-card); border-radius: 20px; border: 1px solid var(--border); }
+        .stat-value { font-size: 48px; font-weight: 900; color: var(--accent); margin-bottom: 8px; }
+        .stat-label { color: var(--text-secondary); font-size: 14px; font-weight: 500; }
+        
+        /* Timeline */
+        .timeline { position: relative; padding-left: 48px; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent), var(--border)); }
+        .timeline-item { position: relative; margin-bottom: 40px; }
+        .timeline-marker { position: absolute; left: -34px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 4px solid var(--bg-dark); box-shadow: 0 0 20px rgba(0,255,136,0.5); }
+        .timeline-content { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+        .timeline-phase { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
+        .timeline-title { font-size: 22px; font-weight: 800; margin: 12px 0; }
+        .timeline-items { color: var(--text-secondary); font-size: 15px; margin: 0; padding-left: 20px; }
+        .timeline-items li { margin-bottom: 8px; }
+        
+        /* McClaw section */
+        .mcclaw-box { background: linear-gradient(135deg, rgba(0,255,136,0.08) 0%, var(--bg-card) 100%); border: 2px solid var(--accent); border-radius: 24px; padding: 48px; text-align: center; }
+        .mcclaw-flow { display: flex; justify-content: center; align-items: center; gap: 24px; flex-wrap: wrap; margin: 32px 0; }
+        .mcclaw-block { background: var(--bg-dark); padding: 28px 32px; border-radius: 16px; min-width: 200px; border: 1px solid var(--border); }
+        .mcclaw-block-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .mcclaw-block-content { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+        .mcclaw-plus { font-size: 32px; color: var(--accent); }
+        .mcclaw-equals { font-size: 32px; color: var(--accent); }
+        .mcclaw-result { background: linear-gradient(135deg, rgba(0,255,136,0.2) 0%, var(--bg-dark) 100%); border-color: var(--accent); }
+        .mcclaw-result .mcclaw-block-content { color: var(--text-primary); font-weight: 600; }
+        
+        /* Highlight boxes */
+        .highlight-box { background: linear-gradient(135deg, rgba(0,255,136,0.1) 0%, transparent 100%); border: 1px solid var(--accent); border-radius: 16px; padding: 32px; margin: 32px 0; }
+        .highlight-title { font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+        .highlight-content { color: var(--text-secondary); line-height: 1.8; }
+        .highlight-content strong { color: var(--text-primary); }
+        
+        /* Whitelist */
+        .whitelist-box { background: var(--bg-card); border: 2px solid var(--accent); border-radius: 24px; padding: 64px 40px; text-align: center; max-width: 600px; margin: 0 auto; position: relative; overflow: hidden; }
+        .whitelist-box::before { content: ''; position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,255,136,0.2) 0%, transparent 70%); }
+        .whitelist-title { font-size: 32px; font-weight: 900; margin-bottom: 16px; position: relative; }
+        .whitelist-desc { color: var(--text-secondary); margin-bottom: 32px; font-size: 16px; position: relative; }
+        .whitelist-input { display: flex; gap: 12px; max-width: 400px; margin: 0 auto; position: relative; }
+        .whitelist-input input { flex: 1; padding: 16px 20px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-dark); color: var(--text-primary); font-size: 16px; }
+        .whitelist-input input:focus { outline: none; border-color: var(--accent); }
+        
+        /* Footer */
+        .footer { border-top: 1px solid var(--border); padding: 48px 32px; text-align: center; }
+        .footer-links { display: flex; gap: 32px; justify-content: center; margin-bottom: 20px; }
+        .footer-link { color: var(--text-secondary); text-decoration: none; font-size: 15px; font-weight: 500; }
+        .footer-link:hover { color: var(--accent); }
+        .footer-text { color: var(--text-muted); font-size: 14px; }
+        
+        /* Competition table */
+        .comp-table { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 15px; }
+        .comp-table th, .comp-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+        .comp-table th { color: var(--accent); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .comp-table td { color: var(--text-secondary); }
+        .comp-table td:first-child { color: var(--text-primary); font-weight: 600; }
+        .comp-table .yes { color: var(--accent); font-weight: 600; }
+        .comp-table .no { color: var(--text-muted); }
+        
+        @media (max-width: 1024px) {
+            .section-split { grid-template-columns: 1fr; gap: 48px; }
+            .section-split.reverse { direction: ltr; }
+        }
+        @media (max-width: 768px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .mcclaw-flow { flex-direction: column; }
+            .mcclaw-plus, .mcclaw-equals { transform: rotate(90deg); }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="#" class="nav-logo">
+            <img src="logo.png" class="nav-logo-img" alt="Trash Bank">
+            <span class="nav-logo-text">Trash Bank</span>
+        </a>
+        <div class="nav-links">
+            <a href="#problem" class="nav-link">Problem</a>
+            <a href="#solution" class="nav-link">Solution</a>
+            <a href="#tokenomics" class="nav-link">Tokenomics</a>
+            <a href="#integration" class="nav-link">McClaw</a>
+            <a href="#roadmap" class="nav-link">Roadmap</a>
+            <a href="whitepaper.html" class="nav-link">Whitepaper</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <img src="dumpy-mascot.png" class="mascot-img" alt="Dumpy the Raccoon">
+            <h1 style="font-size: clamp(48px, 10vw, 96px); font-weight: 900; letter-spacing: 16px; color: #00ff88; margin-bottom: 24px; text-shadow: 0 0 60px rgba(0,255,136,0.6);">TRASH BANK</h1>
+            <div class="tagline">Clean Communities, Built From the Ground Up</div>
+            <h1 class="hero-title">Your Trash Is Someone's Treasure</h1>
+            <p class="hero-subtitle">A protocol that rewards real cleanup work with real value. Anyone can participate. No pre-mine. No team allocation. Earn through contribution, govern through reputation.</p>
+            <div class="cta-group">
+                <a href="#whitelist" class="btn btn-primary">Join Whitelist</a>
+                <a href="whitepaper.html" class="btn btn-secondary">Read Whitepaper</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="problem" class="section">
+        <div class="section-header">
+            <span class="section-tag">The Problem</span>
+            <h2 class="section-title">A Global Crisis Affects Everyone</h2>
+            <p class="section-desc">Cities spend billions on cleanup. Public spaces degrade. Economic pathways exclude millions. One issue, many affected.</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">$11.2B</div>
+                <div class="stat-label">Annual US cleanup costs</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2.1B</div>
+                <div class="stat-label">Tons of waste/year globally</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">90%</div>
+                <div class="stat-label">Americans say litter is a problem in their community</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">0%</div>
+                <div class="stat-label">Reward for cleanup work</div>
+            </div>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <div class="card-icon">🏛️</div>
+                <h3 class="card-title">Municipal Burden</h3>
+                <p class="card-desc">Cities bear entire cleanup cost. No resident participation. Budget fights every year. Reactive, not preventive.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏚️</div>
+                <h3 class="card-title">Community Degradation</h3>
+                <p class="card-desc">Neglected areas attract more neglect. Broken window effect. Property values decline. Residents feel unheard.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🚫</div>
+                <h3 class="card-title">Exclusion from Participation</h3>
+                <p class="card-desc">Traditional work requires smartphones, bank accounts, internet. Those without access are left behind—yet want to contribute.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="solution" class="section section-dark">
+        <div class="section-header">
+            <span class="section-tag">The Solution</span>
+            <h2 class="section-title">Work → Earn → Govern</h2>
+            <p class="section-desc">Complete cleanup tasks. Earn tokens and reputation. Govern the protocol you help build. Influence through contribution, not wealth.</p>
+        </div>
+        
+        <img src="workflow-steps.png" class="workflow-img" alt="Trash Bank workflow: Find Task, Complete Work, Get Validated, Earn Rewards">
+        
+        <div class="highlight-box">
+            <h3 class="highlight-title">How It Works</h3>
+            <div class="highlight-content">
+                <strong>1. Find a Task:</strong> Browse cleanup tasks on McClaw or any integrated platform.<br>
+                <strong>2. Complete the Work:</strong> Clean up the designated area. Take 4 photos as proof.<br>
+                <strong>3. Submit Proof:</strong> Photos are verified (GPS, timestamps, visual comparison).<br>
+                <strong>4. Get Validated:</strong> McClaw agent or high-karma community member approves.<br>
+                <strong>5. Earn Rewards:</strong> Receive MCLAW (from escrow) + Trash Coins + Garbage Cans (from Trash Bank).
+            </div>
+        </div>
+
+        <div class="section-split">
+            <div>
+                <img src="proof-of-work.png" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+            </div>
+            <div>
+                <h3 style="font-size: 28px; margin-bottom: 24px; font-weight: 800;">No Pre-Mine. No Team Allocation.</h3>
+                <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; font-size: 16px;">
+                    Trash Bank starts with 5% liquidity pool + 5% treasury. The remaining 90% must be earned through verified work. This is not "zero supply" — it's "zero free allocation." Everyone, including founders, must earn tokens through contribution.
+                </p>
+                <div style="background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
+                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Initial Allocation</div>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Liquidity Pool</span><span style="color: var(--accent); font-weight: 700;">5%</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Community Treasury</span><span style="color: var(--accent); font-weight: 700;">5%</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Work-Earned</span><span style="color: var(--accent); font-weight: 700;">90%</span></div>
+                        <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Team/Founders</span><span style="color: var(--warning); font-weight: 700;">0%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="tokenomics" class="section">
+        <div class="section-header">
+            <span class="section-tag">Tokenomics</span>
+            <h2 class="section-title">Three-Tier Token System</h2>
+            <p class="section-desc">Serve both crypto-native and non-crypto users. Earned through work, not bought through wealth.</p>
+        </div>
+        
+        <div class="cards" style="margin-top: 48px;">
+            <div class="token-card">
+                <div class="token-card-content">
+                    <div class="token-emoji">🗑️</div>
+                    <h3 class="token-name">Trash Coins</h3>
+                    <div class="token-tier">Database • Soulbound • Non-Crypto</div>
+                    <div class="token-details">
+                        <strong>Earned:</strong> Per validated cleanup task<br>
+                        <strong>Stored:</strong> Database (not on-chain)<br>
+                        <strong>Used:</strong> Vending machine redemption<br>
+                        <strong>Transferable:</strong> No — bound to account<br>
+                        <strong>For:</strong> Non-crypto users, homeless participants
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <div class="token-card-content">
+                    <div class="token-emoji">💎</div>
+                    <h3 class="token-name">Trash Tokens (TTKN)</h3>
+                    <div class="token-tier">ERC-20 • Base Chain • Tradeable</div>
+                    <div class="token-details">
+                        <strong>Earned:</strong> Convert Coins → Tokens (one-way)<br>
+                        <strong>Stored:</strong> On-chain (Base)<br>
+                        <strong>Used:</strong> Trading, staking, DEX<br>
+                        <strong>Transferable:</strong> Yes<br>
+                        <strong>For:</strong> Crypto-native users
+                    </div>
+                </div>
+            </div>
+            <div class="token-card">
+                <div class="token-card-content">
+                    <div class="token-emoji">🏅</div>
+                    <h3 class="token-name">Garbage Cans</h3>
+                    <div class="token-tier">Soulbound NFT • Reputation • Governance</div>
+                    <div class="token-details">
+                        <strong>Earned:</strong> 1-5 per validated task<br>
+                        <strong>Stored:</strong> On-chain (non-transferable)<br>
+                        <strong>Used:</strong> Voting power, validator status<br>
+                        <strong>Transferable:</strong> No — earned only<br>
+                        <strong>Formula:</strong> <code style="background: var(--bg-dark); padding: 2px 8px; border-radius: 4px;">√(Garbage Cans) = Voting Power</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight-box" style="margin-top: 48px;">
+            <h3 class="highlight-title">Why Soulbound Reputation?</h3>
+            <div class="highlight-content">
+                Unlike other DAOs where whales buy influence, Trash Bank uses <strong>soulbound tokens</strong> for reputation. Garbage Cans cannot be bought, sold, or transferred. They can only be earned through verified cleanup work. This prevents the "rich get richer" problem that plagues token-based governance.
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="integration" class="section section-dark">
+        <div class="section-header">
+            <span class="section-tag">McClaw Integration</span>
+            <h2 class="section-title">Enhanced by McClaw, Independent by Design</h2>
+            <p class="section-desc">Trash Bank is a standalone protocol. McClaw is the first integration, not a dependency. Any task/escrow platform can integrate.</p>
+        </div>
+        
+        <div class="highlight-box" style="margin-bottom: 48px;">
+            <h3 class="highlight-title">Why McClaw First?</h3>
+            <div class="highlight-content">
+                <strong>Built-in escrow system</strong> — noneed to build payment infrastructure from scratch.<br>
+                <strong>Wallet-based identity</strong> — users already have addresses for token rewards.<br>
+                <strong>Task verification framework</strong> — photo submission and review process exists.<br>
+                <strong>Small, active user base</strong> — perfect pilot size: enough to test, small enough to iterate fast.<br>
+                <strong>Base chain integration</strong> — low fees, fast transactions, same network target.
+            </div>
+        </div>
+
+        <div class="mcclaw-box">
+            <div class="mcclaw-flow">
+                <div class="mcclaw-block">
+                    <div class="mcclaw-block-label">MCCLAW PROVIDES</div>
+                    <div class="mcclaw-block-content">
+                        Task escrow<br>
+                        Agent verification<br>
+                        MCLAW tokens
+                    </div>
+                </div>
+                <div class="mcclaw-plus">+</div>
+                <div class="mcclaw-block">
+                    <div class="mcclaw-block-label">TRASH BANK ADDS</div>
+                    <div class="mcclaw-block-content">
+                        Photo validation<br>
+                        Trash Coins<br>
+                        Garbage Cans NFT<br>
+                        Vending network
+                    </div>
+                </div>
+                <div class="mcclaw-equals">=</div>
+                <div class="mcclaw-block mcclaw-result">
+                    <div class="mcclaw-block-label">WORKER RECEIVES</div>
+                    <div class="mcclaw-block-content">
+                        MCLAW + Trash Coins<br>
+                        + Garbage Cans
+                    </div>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 14px; margin-top: 24px;">
+                Live test task: <code style="background: var(--bg-dark); padding: 4px 8px; border-radius: 4px;">f2b09868-7bf2-47e5-a90d-b148dcf68e5e</code> on Base
+            </p>
+        </div>
+
+        <!-- McClaw UI Screenshots -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1000px; margin: 48px auto;">
+            <div style="text-align: center;">
+                <img src="mcclaw-ui-1.jpg" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4);">
+                <p style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">McClaw Task Dashboard</p>
+            </div>
+            <div style="text-align: center;">
+                <img src="mcclaw-ui-2.jpg" style="width: 100%; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4);">
+                <p style="color: var(--text-muted); font-size: 13px; margin-top: 8px;">McClaw Escrow System</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 48px;">
+            <h3 style="text-align: center; font-size: 24px; margin-bottom: 32px;">How We're Different</h3>
+            <table class="comp-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Plastic Bank</th>
+                    <th>ZeLoop</th>
+                    <th>Trash Bank</th>
+                </tr>
+                <tr>
+                    <td>Governance</td>
+                    <td class="no">None</td>
+                    <td class="no">None</td>
+                    <td class="yes">DAO</td>
+                </tr>
+                <tr>
+                    <td>Tradeable Token</td>
+                    <td class="no">No</td>
+                    <td class="no">No</td>
+                    <td class="yes">Yes (TTKN)</td>
+                </tr>
+                <tr>
+                    <td>Homeless Inclusion</td>
+                    <td class="no">No</td>
+                    <td class="no">No</td>
+                    <td class="yes">Vending Cards</td>
+                </tr>
+                <tr>
+                    <td>Wallet Required</td>
+                    <td class="no">No</td>
+                    <td class="yes">Yes</td>
+                    <td class="yes">No</td>
+                </tr>
+                <tr>
+                    <td>Waste Types</td>
+                    <td>Plastic</td>
+                    <td>Bottles</td>
+                    <td class="yes">All types</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="usecases" class="section">
+        <div class="section-header">
+            <span class="section-tag">Use Cases</span>
+            <h2 class="section-title">Real Applications</h2>
+            <p class="section-desc">From community cleanup to homeless economic inclusion. Multiple pathways for real impact.</p>
+        </div>
+        
+        <div class="cards">
+            <div class="card">
+                <div class="card-icon">🏙️</div>
+                <h3 class="card-title">Community Cleanup</h3>
+                <p class="card-desc">Residents earn by cleaning their own neighborhoods. Municipalities lower costs while engaging citizens. Verified proof ensures accountability.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎪</div>
+                <h3 class="card-title">Event Cleanup</h3>
+                <p class="card-desc">Post-concert, festival, sports events. Higher rewards for rapid turnaround. Photo verification ensures spaces return to pristine condition.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏢</div>
+                <h3 class="card-title">Corporate CSR</h3>
+                <p class="card-desc">Companies sponsor cleanups for ESG reporting. Employees participate for team-building. Verified impact for annual reports.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏠</div>
+                <h3 class="card-title">Inclusion Pathway</h3>
+                <p class="card-desc">Homeless individuals can earn without smartphones or bank accounts. Trash Bank Cards work like transit cards. Redeem at vending machines for essentials.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🤝</div>
+                <h3 class="card-title">Referral Network</h3>
+                <p class="card-desc">Invite friends. Earn bonus Garbage Cans when they complete their first task. Build community through genuine contribution.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌍</div>
+                <h3 class="card-title">Environmental Credits</h3>
+                <p class="card-desc">Verified cleanup data generates measurable environmental metrics. Potential for carbon credit integration. Blockchain-verified proof of impact.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="roadmap" class="section section-dark">
+        <div class="section-header">
+            <span class="section-tag">Roadmap</span>
+            <h2 class="section-title">Build, Test, Launch</h2>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-phase">Phase 1</div>
+                    <h4 class="timeline-title">Build Infrastructure</h4>
+                    <ul class="timeline-items">
+                        <li>Database architecture for Trash Coins</li>
+                        <li>API endpoints for task submission/validation</li>
+                        <li>Photo verification system (GPS, timestamps)</li>
+                        <li>Trash Bank Card system (NFC, QR)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-phase">Phase 2</div>
+                    <h4 class="timeline-title">Test Concept (McClaw)</h4>
+                    <ul class="timeline-items">
+                        <li>Pilot with 10-50 users</li>
+                        <li>McClaw task escrow integration</li>
+                        <li>Manual validation by agents</li>
+                        <li>Collect feedback, iterate</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-phase">Phase 3</div>
+                    <h4 class="timeline-title">Modify Infrastructure</h4>
+                    <ul class="timeline-items">
+                        <li>Improve based on pilot findings</li>
+                        <li>Scale validation capacity</li>
+                        <li>Add anti-gaming measures</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-phase">Phase 4</div>
+                    <h4 class="timeline-title">Launch Program</h4>
+                    <ul class="timeline-items">
+                        <li>Full McClaw integration</li>
+                        <li>500+ Trash Collectors</li>
+                        <li>First vending machine pilot</li>
+                        <li>Corporate outreach</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-phase">Phase 5</div>
+                    <h4 class="timeline-title">Develop DAO</h4>
+                    <ul class="timeline-items">
+                        <li>Garbage Cans NFT contract (soulbound)</li>
+                        <li>Quadratic voting mechanism</li>
+                        <li>Sub-community formation</li>
+                        <li>Budget distribution system</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-phase">Phase 6</div>
+                    <h4 class="timeline-title">Launch DAO</h4>
+                    <ul class="timeline-items">
+                        <li>First Trash Master election (bi-weekly)</li>
+                        <li>Weekly budget distribution</li>
+                        <li>Community governance active</li>
+                        <li>Evaluate city expansion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="whitelist" class="section">
+        <div class="whitelist-box">
+            <h2 class="whitelist-title">Join the Whitelist</h2>
+            <p class="whitelist-desc">Be among the first supporters. Original Rubbish Badge holders get priority access to Trash Collector roles.</p>
+            <div class="whitelist-input">
+                <input type="email" placeholder="Enter your email">
+                <button class="btn btn-primary">Get Access</button>
+            </div>
+            <p style="color: var(--text-muted); font-size: 13px; margin-top: 20px;">
+                Telegram: <a href="#" style="color: var(--accent);">t.me/trashbank</a>
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="whitepaper.html" class="footer-link">Whitepaper</a>
+            <a href="#" class="footer-link">GitHub</a>
+            <a href="#" class="footer-link">Telegram</a>
+            <a href="#" class="footer-link">Twitter</a>
+        </div>
+        <p class="footer-text">Trash Bank — Turn Litter Into Social Capital</p>
+        <p style="margin-top: 8px; color: var(--text-muted); font-size: 13px;">Standalone protocol. Integrating with McClaw. Built on Base.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
