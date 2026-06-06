@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Bank — DAO Governance</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .logo { font-size: 32px; font-weight: bold; color: #00ff88; margin-bottom: 10px; }
+        
+        .card { background: #1a1a1a; border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid #2a2a2a; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .card-title { font-size: 18px; font-weight: 600; }
+        .badge { background: #00ff88; color: #000; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: bold; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: linear-gradient(135deg, #1a1a1a, #222); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #333; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #00ff88; }
+        .stat-label { font-size: 12px; color: #888; margin-top: 8px; }
+        
+        .proposal-card { background: #1a1a1a; border-radius: 12px; padding: 20px; border-left: 4px solid #00ff88; margin-bottom: 16px; }
+        .proposal-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        .proposal-meta { display: flex; gap: 16px; font-size: 13px; color: #888; margin-bottom: 12px; }
+        .proposal-votes { display: flex; gap: 12px; margin-top: 12px; }
+        .vote-btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; }
+        .vote-yes { background: #00ff88; color: #000; }
+        .vote-no { background: #2a2a2a; color: #fff; border: 1px solid #444; }
+        
+        .progress-bar { background: #2a2a2a; border-radius: 999px; height: 8px; margin-top: 12px; }
+        .progress-fill { background: #00ff88; height: 100%; border-radius: 999px; }
+        
+        .karma-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .karma-card { background: #2a2a2a; border-radius: 8px; padding: 16px; }
+        .karma-rank { font-size: 32px; margin-bottom: 8px; }
+        .karma-name { font-weight: 600; }
+        .karma-points { font-size: 12px; color: #00ff88; }
+        
+        .budget-bar { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+        .budget-location { flex: 1; }
+        .budget-amount { color: #00ff88; font-weight: bold; }
+        
+        .btn { background: #00ff88; color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        .btn:hover { background: #00cc66; }
+        
+        .tier { display: inline-block; background: #2a2a2a; padding: 4px 12px; border-radius: 999px; font-size: 11px; margin-left: 8px; }
+        .tier-master { background: #00ff88; color: #000; }
+        .tier-validator { background: #ffaa00; color: #000; }
+        .tier-member { background: #555; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🗑️ Trash Bank DAO</div>
+        <p style="color: #888; margin-bottom: 24px;">Community governance for clean neighborhoods</p>
+        
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Tasks Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">842</div>
+                <div class="stat-label">Active Workers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15.3K</div>
+                <div class="stat-label">Trash Coins Circulating</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">23</div>
+                <div class="stat-label">Sub-Communities</div>
+            </div>
+        </div>
+        
+        <!-- Governance Tier -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">🏛️ Your Role</div>
+                <span class="badge">ACTIVE</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px; margin-top: 12px;">
+                <div style="font-size: 48px;">🗑️</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 20px; font-weight: bold;">Trash Master <span class="tier tier-master">GOVERNANCE</span></div>
+                    <div style="color: #888; margin-top: 4px;">42 Garbage Cans staked • Voting weight: 2.1x</div>
+                </div>
+            </div>
+            <div style="margin-top: 16px; padding: 12px; background: #2a2a2a; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Progress to Senior Trash Master</span>
+                    <span style="color: #00ff88;">42/100 Garbage Cans</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 42%"></div></div>
+            </div>
+        </div>
+        
+        <!-- Active Proposals -->
+        <div class="card">
+            <div class="card-title" style="margin-bottom: 16px;">📊 Active Proposals</div>
+            
+            <div class="proposal-card">
+                <div class="proposal-title">Proposal #47: Increase task reward to 15 Trash Coins</div>
+                <div class="proposal-meta">
+                    <span>👤 Trash Master Alice</span>
+                    <span>🗑️ 38 Garbage Cans</span>
+                    <span>⏰ 2 days left</span>
+                </div>
+                <div style="color: #aaa; font-size: 14px;">Proposal to increase base reward from 10 to 15 Trash Coins per cleanup to incentivize more participation in under-served areas.</div>
+                <div style="margin-top: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                        <span style="color: #00ff88;">👍 Yes: 67%</span>
+                        <span style="color: #ff4444;">👎 No: 33%</span>
+                        <span style="color: #888;">Quorum: 82%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 67%"></div></div>
+                </div>
+                <div class="proposal-votes">
+                    <button class="vote-btn vote-yes" onclick="alert('Vote recorded!')">Vote Yes</button>
+                    <button class="vote-btn vote-no" onclick="alert('Vote recorded!')">Vote No</button>
+                </div>
+            </div>
+            
+            <div class="proposal-card">
+                <div class="proposal-title">Proposal #48: Add recycling sorting bonus (+5 coins)</div>
+                <div class="proposal-meta">
+                    <span>👤 Trash Master Bob</span>
+                    <span>🗑️ 51 Garbage Cans</span>
+                    <span>⏰ 5 days left</span>
+                </div>
+                <div style="color: #aaa; font-size: 14px;">Bonus reward for separating recyclables from general trash, verified via photo submission.</div>
+                <div style="margin-top: 12px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 14px;">
+                        <span style="color: #00ff88;">👍 Yes: 45%</span>
+                        <span style="color: #ff4444;">👎 No: 55%</span>
+                        <span style="color: #888;">Quorum: 34%</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" style="width: 45%; background: #ffaa00;"></div></div>
+                </div>
+                <div class="proposal-votes">
+                    <button class="vote-btn vote-yes" onclick="alert('Vote recorded!')">Vote Yes</button>
+                    <button class="vote-btn vote-no" onclick="alert('Vote recorded!')">Vote No</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Weekly Budget Distribution -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">💰 Weekly Budget Distribution</div>
+                <span style="color: #888; font-size: 14px;">1,000 MCLAW allocated</span>
+            </div>
+            <p style="color: #888; font-size: 14px; margin-bottom: 16px;">Community votes on budget allocation to neighborhood sub-communities.</p>
+            
+            <div style="margin-top: 12px;">
+                <div class="budget-bar">
+                    <div class="budget-location">📍 Downtown District</div>
+                    <div class="budget-amount">300 MCLAW</div>
+                    <span style="color: #00ff88;">30%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 30%"></div></div>
+            </div>
+            
+            <div style="margin-top: 8px;">
+                <div class="budget-bar">
+                    <div class="budget-location">📍 Riverside Park</div>
+                    <div class="budget-amount">250 MCLAW</div>
+                    <span style="color: #00ff88;">25%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 25%"></div></div>
+            </div>
+            
+            <div style="margin-top: 8px;">
+                <div class="budget-bar">
+                    <div class="budget-location">📍 East Side</div>
+                    <div class="budget-amount">200 MCLAW</div>
+                    <span style="color: #00ff88;">20%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 20%"></div></div>
+            </div>
+            
+            <div style="margin-top: 8px;">
+                <div class="budget-bar">
+                    <div class="budget-location">📍 Industrial Zone</div>
+                    <div class="budget-amount">150 MCLAW</div>
+                    <span style="color: #00ff88;">15%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 15%"></div></div>
+            </div>
+            
+            <div style="margin-top: 8px;">
+                <div class="budget-bar">
+                    <div class="budget-location">📍 Reserve Fund</div>
+                    <div class="budget-amount">100 MCLAW</div>
+                    <span style="color: #00ff88;">10%</span>
+                </div>
+                <div class="progress-bar"><div class="progress-fill" style="width: 10%; background: #555;"></div></div>
+            </div>
+        </div>
+        
+        <!-- Leaderboard -->
+        <div class="card">
+            <div class="card-title" style="margin-bottom: 16px;">🏆 Top Validators</div>
+            <p style="color: #888; font-size: 14px; margin-bottom: 16px;">High-karma community members with validation permissions.</p>
+            
+            <div class="karma-grid">
+                <div class="karma-card">
+                    <div class="karma-rank">🥇</div>
+                    <div class="karma-name">Trash Master Alice <span class="tier tier-master">MASTER</span></div>
+                    <div class="karma-points">127 Garbage Cans • 89 tasks validated</div>
+                </div>
+                <div class="karma-card">
+                    <div class="karma-rank">🥈</div>
+                    <div class="karma-name">Bob_The_Clean <span class="tier tier-validator">VALIDATOR</span></div>
+                    <div class="karma-points">94 Garbage Cans • 67 tasks validated</div>
+                </div>
+                <div class="karma-card">
+                    <div class="karma-rank">🥉</div>
+                    <div class="karma-name">GreenWarrior <span class="tier tier-validator">VALIDATOR</span></div>
+                    <div class="karma-points">81 Garbage Cans • 52 tasks validated</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Create Proposal -->
+        <div class="card">
+            <div class="card-title" style="margin-bottom: 16px;">📝 New Proposal</div>
+            <p style="color: #888; font-size: 14px; margin-bottom: 16px;">Stake 10 Garbage Cans to create a proposal. Unlocked if quorum achieved.</p>
+            
+            <div style="margin-bottom: 12px;">
+                <input type="text" placeholder="Proposal title..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 14px;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <textarea placeholder="Describe your proposal in detail..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-size: 14px; height: 100px; resize: vertical;"></textarea>
+            </div>
+            <button class="btn" onclick="alert('Proposal submitted!')">Submit Proposal (Stake 10 Garbage Cans)</button>
+        </div>
+        
+        <footer style="margin-top: 40px; text-align: center; color: #555; font-size: 12px;">
+            Trash Bank DAO — Built on McClaw | Powered by Base
+        </footer>
+    </div>
+</body>
+</html>

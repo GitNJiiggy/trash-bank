@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Bank — Vending Machine Redemption</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; }
+        .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+        .logo { font-size: 28px; font-weight: bold; color: #00ff88; margin-bottom: 8px; }
+        .subtitle { color: #888; margin-bottom: 32px; }
+        
+        .machine { background: linear-gradient(145deg, #1a2a1a, #0a1a0a); border-radius: 20px; padding: 24px; border: 2px solid #00ff88; position: relative; }
+        .machine-screen { background: #000; border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 20px; }
+        .screen-wallet { font-size: 14px; color: #00ff88; margin-bottom: 8px; }
+        .screen-balance { font-size: 48px; font-weight: bold; color: #00ff88; }
+        .screen-label { font-size: 12px; color: #888; }
+        .screen-scan { font-size: 80px; margin: 8px 0; }
+        
+        .items-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .item { background: #1a1a1a; border-radius: 12px; padding: 16px; text-align: center; cursor: pointer; border: 2px solid #2a2a2a; transition: all 0.2s; }
+        .item:hover { border-color: #00ff88; transform: scale(1.05); }
+        .item.selected { border-color: #00ff88; background: #1a2a1a; }
+        .item-icon { font-size: 36px; margin-bottom: 8px; }
+        .item-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+        .item-price { font-size: 16px; color: #00ff88; font-weight: bold; }
+        .item-stock { font-size: 10px; color: #666; }
+        
+        .cart { margin-top: 20px; background: #1a1a1a; border-radius: 12px; padding: 16px; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .cart-total-label { font-size: 14px; color: #888; }
+        .cart-total-value { font-size: 24px; color: #00ff88; font-weight: bold; }
+        
+        .btn { background: #00ff88; color: #000; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 12px; }
+        .btn:hover { background: #00cc66; }
+        .btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+        
+        .note { background: #1a1a1a; border-radius: 8px; padding: 16px; margin-top: 24px; border-left: 3px solid #ffaa00; }
+        .note-title { font-weight: 600; color: #ffaa00; margin-bottom: 8px; }
+        .note-text { font-size: 13px; color: #aaa; line-height: 1.6; }
+        
+        .location { margin-top: 24px; padding: 12px; background: #1a1a1a; border-radius: 8px; text-align: center; }
+        .location-label { font-size: 12px; color: #888; }
+        .location-name { font-size: 14px; color: #00ff88; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🗑️ Trash Bank Vending</div>
+        <div class="subtitle">Basic Needs Redemption Terminal</div>
+        
+        <div class="machine">
+            <div class="machine-screen">
+                <div class="screen-wallet">WALLET: TB-7X9K2</div>
+                <div class="screen-balance">127</div>
+                <div class="screen-label">TRASH COINS AVAILABLE</div>
+                <div class="screen-scan">📱</div>
+                <div class="screen-label">Scan Trash Bank Card or QR</div>
+            </div>
+            
+            <div class="items-grid">
+                <div class="item" onclick="selectItem(this, 5)">
+                    <div class="item-icon">☕</div>
+                    <div class="item-name">Hot Coffee</div>
+                    <div class="item-price">5 coins</div>
+                    <div class="item-stock">Stock: 24</div>
+                </div>
+                <div class="item" onclick="selectItem(this, 3)">
+                    <div class="item-icon">💧</div>
+                    <div class="item-name">Bottled Water</div>
+                    <div class="item-price">3 coins</div>
+                    <div class="item-stock">Stock: 48</div>
+                </div>
+                <div class="item" onclick="selectItem(this, 8)">
+                    <div class="item-icon">🍜</div>
+                    <div class="item-name">Instant Noodles</div>
+                    <div class="item-price">8 coins</div>
+                    <div class="item-stock">Stock: 36</div>
+                </div>
+                <div class="item" onclick="selectItem(this, 12)">
+                    <div class="item-icon">🥪</div>
+                    <div class="item-name">Sandwich</div>
+                    <div class="item-price">12 coins</div>
+                    <div class="item-stock">Stock: 18</div>
+                </div>
+                <div class="item" onclick="selectItem(this, 15)">
+                    <div class="item-icon">🧼</div>
+                    <div class="item-name">Hygiene Kit</div>
+                    <div class="item-price">15 coins</div>
+                    <div class="item-stock">Stock: 12</div>
+                </div>
+                <div class="item" onclick="selectItem(this, 20)">
+                    <div class="item-icon">🧥</div>
+                    <div class="item-name">Warm Socks</div>
+                    <div class="item-price">20 coins</div>
+                    <div class="item-stock">Stock: 8</div>
+                </div>
+            </div>
+            
+            <div class="cart">
+                <div class="cart-header">
+                    <div>
+                        <div class="cart-total-label">Selected Items</div>
+                        <div id="selectedItems" style="font-size: 13px; color: #aaa; margin-top: 4px;">No items selected</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="cart-total-label">Total</div>
+                        <div class="cart-total-value" id="totalCoins">0 coins</div>
+                    </div>
+                </div>
+                <button class="btn" id="redeemBtn" onclick="redeem()" disabled>Redeem Selected Items</button>
+            </div>
+        </div>
+        
+        <div class="note">
+            <div class="note-title">📍 No Smartphone Required</div>
+            <div class="note-text">
+                Trash Bank Cards work like transit cards. Earn Trash Coins by completing cleanup tasks, 
+                then redeem here for essentials. Cards can be obtained at community centers, shelters, 
+                or from McClaw validators.
+            </div>
+        </div>
+        
+        <div class="location">
+            <div class="location-label">Machine Location</div>
+            <div class="location-name">Central Park Community Center — Main Lobby</div>
+            <div style="margin-top: 8px; font-size: 12px; color: #888;">Open 24/7 • Restocked Daily</div>
+        </div>
+        
+        <footer style="margin-top: 32px; text-align: center; color: #555; font-size: 11px;">
+            Trash Bank — Inclusive Redemption System | No crypto wallet needed
+        </footer>
+    </div>
+    
+    <script>
+        let selectedItems = [];
+        let totalCoins = 0;
+        const balance = 127;
+        
+        function selectItem(element, price) {
+            element.classList.toggle('selected');
+            const name = element.querySelector('.item-name').textContent;
+            
+            if (element.classList.contains('selected')) {
+                selectedItems.push({ name, price, element });
+                totalCoins += price;
+            } else {
+                selectedItems = selectedItems.filter(item => item.element !== element);
+                totalCoins -= price;
+            }
+            
+            updateCart();
+        }
+        
+        function updateCart() {
+            const itemsDiv = document.getElementById('selectedItems');
+            const totalDiv = document.getElementById('totalCoins');
+            const btn = document.getElementById('redeemBtn');
+            
+            if (selectedItems.length === 0) {
+                itemsDiv.textContent = 'No items selected';
+                btn.disabled = true;
+            } else {
+                itemsDiv.textContent = selectedItems.map(i => i.name).join(', ');
+                btn.disabled = totalCoins > balance;
+            }
+            
+            totalDiv.textContent = totalCoins + ' coins';
+            
+            if (totalCoins > balance) {
+                totalDiv.style.color = '#ff4444';
+                itemsDiv.textContent += ' (Insufficient balance)';
+            } else {
+                totalDiv.style.color = '#00ff88';
+            }
+        }
+        
+        function redeem() {
+            alert('Dispensing: ' + selectedItems.map(i => i.name).join(', ') + '\n\nRemaining balance: ' + (balance - totalCoins) + ' Trash Coins\n\nThank you for keeping your community clean!');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Bank — Pitch Deck</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e0e0e0; overflow: hidden; }
+        .slide { width: 100vw; height: 100vh; display: none; padding: 60px80px; position: relative; }
+        .slide.active { display: flex; flex-direction: column; }
+        
+        .logo { font-size: 48px; font-weight: bold; color: #00ff88; }
+        .subtitle { color: #888; font-size: 24px; margin-top: 8px; }
+        .title { font-size: 72px; font-weight: bold; color: #fff; line-height: 1.1; }
+        .title-accent { color: #00ff88; }
+        .body { font-size: 28px; line-height: 1.6; color: #ccc; max-width: 900px; }
+        .bullet { margin: 16px 0; padding-left: 32px; position: relative; }
+        .bullet::before { content: '🗑️'; position: absolute; left: 0; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr1fr; gap: 40px; margin-top: 40px; }
+        .card { background: #1a1a1a; border-radius: 16px; padding: 32px; border: 1px solid #2a2a2a; }
+        .card-title { font-size: 24px; font-weight: bold; color: #00ff88; margin-bottom: 16px; }
+        .card-body { font-size: 18px; color: #aaa; line-height: 1.5; }
+        
+        .stat-row { display: flex; gap: 40px; margin-top: 40px; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 64px; font-weight: bold; color: #00ff88; }
+        .stat-label { font-size: 18px; color: #888; margin-top: 8px; }
+        
+        .flow { display: flex; align-items: center; gap: 24px; margin-top: 40px; }
+        .flow-box { background: #1a1a1a; border-radius: 12px; padding: 24px 32px; border: 1px solid #2a2a2a; text-align: center; min-width: 180px; }
+        .flow-box.highlight { border-color: #00ff88; background: #0a1a0a; }
+        .flow-arrow { font-size: 32px; color: #00ff88; }
+        
+        .nav { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; }
+        .nav-dot { width: 12px; height: 12px; border-radius: 50%; background: #333; cursor: pointer; }
+        .nav-dot.active { background: #00ff88; }
+        
+        .slide-num { position: fixed; bottom: 40px; right: 80px; font-size: 18px; color: #555; }
+        .controls { position: fixed; bottom: 40px; left: 80px; font-size: 14px; color: #555; }
+        
+        .problem { color: #ff4444; }
+        .solution { color: #00ff88; }
+        
+        .token-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+        .token-card { background: linear-gradient(145deg, #1a1a1a, #222); border-radius: 16px; padding: 24px; border: 1px solid #333; }
+        .token-icon { font-size: 48px; margin-bottom: 16px; }
+        .token-name { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+        .token-desc { font-size: 16px; color: #888; }
+        
+        .cta { background: #00ff88; color: #000; padding: 24px 48px; border-radius: 12px; font-size: 24px; font-weight: bold; display: inline-block; margin-top: 40px; }
+        
+        .quote { font-size: 48px; font-style: italic; color: #00ff88; text-align: center; margin: auto; max-width: 800px; }
+        .quote-author { font-size: 24px; color: #888; margin-top: 24px; text-align: center; }
+    </style>
+</head>
+<body>
+    <!-- Slide1: Title -->
+    <div class="slide active" id="slide1">
+        <div style="margin: auto; text-align: center;">
+            <div class="logo">🗑️ Trash Bank</div>
+            <div class="title" style="margin-top: 40px;">Turning Litter Into<br><span class="title-accent">Social Capital</span></div>
+            <div class="subtitle" style="margin-top: 24px;">A McClaw-Integrated Micro-Task Platform</div>
+            <div style="margin-top: 60px; color: #555; font-size: 18px;">Press arrow keys or click dots to navigate</div>
+        </div>
+    </div>
+    
+    <!-- Slide 2: Problem -->
+    <div class="slide" id="slide2">
+        <div class="title">The <span class="problem">Problem</span></div>
+        <div class="body" style="margin-top: 40px;">
+            <div class="bullet">Cities spend <strong>billions</strong> on cleanup annually</div>
+            <div class="bullet">Public spaces degrade without community ownership</div>
+            <div class="bullet">Homeless populations lack economic inclusion pathways</div>
+            <div class="bullet">Environmental damage compounds daily</div>
+        </div>
+        <div style="margin-top: 60px; padding: 32px; background: #1a0a0a; border-radius: 16px; border-left: 4px solid #ff4444;">
+            <div style="font-size: 36px; color: #ff4444;">People don't pick up their fucking trash.</div>
+        </div>
+    </div>
+    
+    <!-- Slide 3: Solution -->
+    <div class="slide" id="slide3">
+        <div class="title">The <span class="solution">Solution</span></div>
+        <div class="body" style="margin-top: 40px;">
+            <div class="bullet">Tasks posted onMcClaw → workers accept</div>
+            <div class="bullet">4-photo proof system with GPS verification</div>
+            <div class="bullet">Validation by McClaw agents or high-karma community</div>
+            <div class="bullet">Rewards flow automatically on completion</div>
+        </div>
+        <div class="flow">
+            <div class="flow-box">📋 Task Posted</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">📸 Photos Submitted</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box highlight">✓ Validated</div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">💰 Rewards</div>
+        </div>
+    </div>
+    
+    <!-- Slide 4:How It Works -->
+    <div class="slide" id="slide4">
+        <div class="title">How It Works</div>
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-title">📍1. Find Task</div>
+                <div class="card-body">
+                    Open McClaw, browse available Trash Bank tasks in your area. Each task shows location, reward, and requirements.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">📸 2. Complete & Prove</div>
+                <div class="card-body">
+                    Take 4 photos: before, trash collected, after (clean), disposal. GPS and timestamps auto-verified.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">✓ 3. Validation</div>
+                <div class="card-body">
+                    McClaw agents or high-karma community validators review proofs. Anti-scam checks: GPS, time, photo uniqueness.
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">💰 4. Rewards</div>
+                <div class="card-body">
+                    Receive Trash Coins + Garbage Can karma. Redeem coins at vending machines or convert to on-chain tokens.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 5: Token Architecture -->
+    <div class="slide" id="slide5">
+        <div class="title">Token Architecture</div>
+        <div class="token-grid">
+            <div class="token-card">
+                <div class="token-icon">🗑️</div>
+                <div class="token-name">Trash Coins</div>
+                <div class="token-desc">Database-level points. Instant redemption. No wallet required. For non-crypto users.</div>
+            </div>
+            <div class="token-card">
+                <div class="token-icon">💎</div>
+                <div class="token-name">Trash Tokens (TTKN)</div>
+                <div class="token-desc">On-chain (Base). Tradeable, stakeable. For crypto-native users. 1:1 with Coins.</div>
+            </div>
+            <div class="token-card">
+                <div class="token-icon">🏅</div>
+                <div class="token-name">Garbage Cans</div>
+                <div class="token-desc">Karma badges. Non-transferable. Earn validator rights. DAO voting weight.</div>
+            </div>
+        </div>
+        <div style="margin-top: 40px; padding: 24px; background: #1a2a1a; border-radius: 12px; text-align: center;">
+            <div style="font-size: 20px; color: #888;">Conversion</div>
+            <div style="font-size: 32px; color: #00ff88; margin-top: 8px;">1 Trash Token = 1 Trash Coin</div>
+            <div style="font-size: 16px; color: #666; margin-top: 8px;">One-way: Coins → Tokens</div>
+        </div>
+    </div>
+    
+    <!-- Slide 6: DAO Governance -->
+    <div class="slide" id="slide6">
+        <div class="title">DAO Governance</div>
+        <div class="grid-2">
+            <div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-title">🏛️ Trash Masters</div>
+                    <div class="card-body">Voted in by community. Distribute weekly budgets. Sponsor new locations.</div>
+                </div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-title">🏘️ Sub-Communities</div>
+                    <div class="card-body">Neighborhoods vote on priorities. Manage local tasks and budgets.</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">👤 Trash Collectors</div>
+                    <div class="card-body">Complete tasks. Earn coins + karma. Rise to validator status.</div>
+                </div>
+            </div>
+            <div>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Garbage Can= 1 Vote</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10</div>
+                        <div class="stat-label">Stake for Proposal</div>
+                    </div>
+                </div>
+                <div style="margin-top: 40px; padding: 24px; background: #1a1a1a; border-radius: 12px;">
+                    <div style="font-size: 18px; color: #00ff88; margin-bottom: 12px;">Weekly Budget Distribution</div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Downtown</span><span style="color: #00ff88;">30%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Riverside</span><span style="color: #00ff88;">25%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>East Side</span><span style="color: #00ff88;">20%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Reserve</span><span style="color: #888;">10%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 7: McClaw Integration -->
+    <div class="slide" id="slide7">
+        <div class="title">McClaw Integration</div>
+        <div class="body" style="margin-top: 40px;">
+            <div class="bullet">Built on McClaw's task escrow system</div>
+            <div class="bullet">Agent verification for trusted validation</div>
+            <div class="bullet">On-chain token distribution</div>
+            <div class="bullet">Reputation system tracks karma</div>
+        </div>
+        <div style="margin-top: 40px; padding: 24px; background: #1a2a1a; border-radius: 12px; border: 1px solid #00ff88;">
+            <div style="font-size: 14px; color: #888;">LIVE TEST TASK</div>
+            <div style="font-size: 24px; color: #00ff88; margin-top: 8px;">Trash Pickup - Central Park</div>
+            <div style="font-size: 16px; color: #ccc; margin-top: 8px;">Status: Funded | Escrow: 0.5 MCLAW</div>
+            <div style="font-size: 14px; color: #666; margin-top: 8px;">Task ID: f2b09868-7bf2-47e5-a90d-b148dcf68e5e</div>
+        </div>
+    </div>
+    
+    <!-- Slide 8: Anti-Scam -->
+    <div class="slide" id="slide8">
+        <div class="title">Anti-Scam Measures</div>
+        <div class="grid-2">
+            <div>
+                <div class="card" style="margin-bottom: 16px;">
+                    <div class="card-title">📍 GPS + Geofence</div>
+                    <div class="card-body">All photos must be within 50m of task location</div>
+                </div>
+                <div class="card" style="margin-bottom: 16px;">
+                    <div class="card-title">🕐 EXIF Timestamps</div>
+                    <div class="card-body">Chronological order verified. No old photos.</div>
+                </div>
+                <div class="card" style="margin-bottom: 16px;">
+                    <div class="card-title">📸 Visual Comparison</div>
+                    <div class="card-body">AI checks before/after for real changes</div>
+                </div>
+            </div>
+            <div>
+                <div class="card" style="margin-bottom: 16px;">
+                    <div class="card-title">🔒 Duplicate Detection</div>
+                    <div class="card-body">Photo hash prevents reuse across tasks</div>
+                </div>
+                <div class="card" style="margin-bottom: 16px;">
+                    <div class="card-title">👤 Reputation Gates</div>
+                    <div class="card-body">Account age >7 days before accepting tasks</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🧮 Rate Limits</div>
+                    <div class="card-body">Max 5 tasks/day per user to cap exploitation</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 9: Inclusion -->
+    <div class="slide" id="slide9">
+        <div class="title">Inclusive by Design</div>
+        <div class="body" style="margin-top: 40px;">
+            <div class="bullet">No smartphone required for Trash Coins</div>
+            <div class="bullet">Vending machines at shelters, community centers</div>
+            <div class="bullet">Card/badge scan for redemption</div>
+            <div class="bullet">Pathway from homeless to validator</div>
+        </div>
+        <div style="margin-top: 40px; padding: 32px; background: linear-gradient(135deg, #1a2a1a, #0a1a0a); border-radius: 16px; border: 1px solid #00ff88;">
+            <div style="font-size: 24px; color: #00ff88; margin-bottom: 16px;">🏪 Basic Needs Vending</div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center;">
+                <div><div style="font-size: 32px;">☕</div><div>Coffee</div><div style="color: #00ff88;">5 coins</div></div>
+                <div><div style="font-size: 32px;">💧</div><div>Water</div><div style="color: #00ff88;">3 coins</div></div>
+                <div><div style="font-size: 32px;">🍜</div><div>Noodles</div><div style="color: #00ff88;">8 coins</div></div>
+                <div><div style="font-size: 32px;">🧼</div><div>Hygiene</div><div style="color: #00ff88;">15 coins</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 10: Competitive Advantage -->
+    <div class="slide" id="slide10">
+        <div class="title">Why Trash Bank?</div>
+        <div class="grid-2" style="margin-top: 40px;">
+            <div class="card" style="background: linear-gradient(135deg, #1a2a1a, #222); border-color: #00ff88;">
+                <div class="card-title">Trash Bank</div>
+                <div class="card-body">
+                    ✅ On-chain escrow<br>
+                    ✅ McClaw integration<br>
+                    ✅ DAO governance<br>
+                    ✅ Homeless inclusion<br>
+                    ✅ Vending machines
+                </div>
+            </div>
+            <div>
+                <div class="card" style="margin-bottom: 16px; opacity: 0.6;">
+                    <div class="card-title">Standard Gig Apps</div>
+                    <div class="card-body">❌ No on-chain | ✅ Tasks | ❌ No DAO | ❌ No inclusion</div>
+                </div>
+                <div class="card" style="margin-bottom: 16px; opacity: 0.6;">
+                    <div class="card-title">Traditional Cleanup</div>
+                    <div class="card-body">❌ No tech | ❌ No tasks | ❌ No DAO | ❌ No inclusion</div>
+                </div>
+                <div class="card" style="opacity: 0.6;">
+                    <div class="card-title">Charity Programs</div>
+                    <div class="card-body">❌ No on-chain | ❌ No tasks | ❌ No DAO | ✅ Inclusion</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Roadmap -->
+    <div class="slide" id="slide11">
+        <div class="title">Roadmap</div>
+        <div style="margin-top: 40px;">
+            <div style="display: flex; gap: 24px;">
+                <div style="flex: 1;">
+                    <div class="card" style="border-color: #00ff88;">
+                        <div class="card-title">Phase 1: MVP</div>
+                        <div class="card-body">
+                            Database coins<br>
+                            McClaw task integration<br>
+                            Manual validation<br>
+                            <strong style="color: #00ff88;">NOW</strong>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="card">
+                        <div class="card-title">Phase 2: On-Chain</div>
+                        <div class="card-body">
+                            TTKN token on Base<br>
+                            Coin ↔ Token conversion<br>
+                            Staking for DAO<br>
+                            Q3 2026
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="card">
+                        <div class="card-title">Phase 3: Scale</div>
+                        <div class="card-body">
+                            Public IDO<br>
+                            AI validation<br>
+                            Multiple cities<br>
+                            Q4 2026+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 12: Call to Action -->
+    <div class="slide" id="slide12">
+        <div style="margin: auto; text-align: center;">
+            <div class="quote">"Clean communities, built from the ground up."</div>
+            <div style="margin-top: 40px; display: flex; gap: 24px; justify-content: center;">
+                <div style="background: #1a1a1a; padding: 24px 32px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 14px; color: #888;">Status</div>
+                    <div style="font-size: 24px; color: #00ff88; margin-top: 8px;">MVP Ready</div>
+                </div>
+                <div style="background: #1a1a1a; padding: 24px 32px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 14px; color: #888;">Chain</div>
+                    <div style="font-size: 24px; color: #fff; margin-top: 8px;">Base</div>
+                </div>
+                <div style="background: #1a1a1a; padding: 24px 32px; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 14px; color: #888;">Integration</div>
+                    <div style="font-size: 24px; color: #fff; margin-top: 8px;">McClaw</div>
+                </div>
+            </div>
+            <div class="cta">Let's Build This Together</div>
+            <div style="margin-top: 40px; color: #888;">
+                🗑️ Trash Bank — Turn Litter Into Social Capital
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation -->
+    <div class="nav">
+        <div class="nav-dot active" onclick="goToSlide(1)"></div>
+        <div class="nav-dot" onclick="goToSlide(2)"></div>
+        <div class="nav-dot" onclick="goToSlide(3)"></div>
+        <div class="nav-dot" onclick="goToSlide(4)"></div>
+        <div class="nav-dot" onclick="goToSlide(5)"></div>
+        <div class="nav-dot" onclick="goToSlide(6)"></div>
+        <div class="nav-dot" onclick="goToSlide(7)"></div>
+        <div class="nav-dot" onclick="goToSlide(8)"></div>
+        <div class="nav-dot" onclick="goToSlide(9)"></div>
+        <div class="nav-dot" onclick="goToSlide(10)"></div>
+        <div class="nav-dot" onclick="goToSlide(11)"></div>
+        <div class="nav-dot" onclick="goToSlide(12)"></div>
+    </div>
+    <div class="slide-num"><span id="current">1</span> /12</div>
+    <div class="controls">← → Arrow keys to navigate</div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+        
+        function goToSlide(n) {
+            document.getElementById('slide' + currentSlide).classList.remove('active');
+            document.querySelectorAll('.nav-dot')[currentSlide - 1].classList.remove('active');
+            currentSlide = n;
+            document.getElementById('slide' + currentSlide).classList.add('active');
+            document.querySelectorAll('.nav-dot')[currentSlide - 1].classList.add('active');
+            document.getElementById('current').textContent = currentSlide;
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        });
+    </script>
+</body>
+</html>
