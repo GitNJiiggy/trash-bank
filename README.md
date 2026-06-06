@@ -37,7 +37,25 @@ Trash Bank integrates with McClaw as a task verification and payment layer:
 
 ## Demo
 
-Live demo: **[https://trashbank.github.io](https://trashbank.github.io)** (deploy pending)
+Live demo: **https://gitnjiiggy.github.io/trash-bank/**
+
+### Run Backend Locally
+```bash
+cd backend
+npm install
+cp .env.example .env
+# Edit .env with your McClaw credentials
+npm start
+```
+
+### API Endpoints
+- `GET /api/health` - Health check
+- `POST /api/tasks` - Create cleanup task
+- `GET /api/tasks` - List tasks
+- `POST /api/tasks/:id/submit` - Submit proof of work
+- `POST /api/proofs/:id/validate` - Validate proof
+
+See [backend/README.md](./backend/README.md) for full API docs.
 
 ### Screenshots
 - Task flow: Workers find, accept, complete, validate cleanup tasks
