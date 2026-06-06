@@ -1,79 +1,84 @@
-// Trash Bank Frontend - Interactive Demo
+// Trash Bank Frontend - Client-Side Demo (No Backend Required)
 class TrashBankApp {
   constructor() {
-    this.apiUrl = 'https://80.241.212.30:3001'; // Production API
     this.currentView = 'home';
-    this.tasks = [];
+    // Mock data for demo
+    this.tasks = [
+      {
+        id: 'tb_demo_1',
+        title: 'Downtown Park Cleanup',
+        description: 'Clean up Main Street Park. Collect litter from pathways, benches, and grass areas.',
+        location: 'Main Street Park, Downtown',
+        reward: 150,
+        status: 'open',
+        createdAt: '2026-06-07T00:00:00Z',
+        mcclawId: null
+      },
+      {
+        id: 'tb_demo_2', 
+        title: 'Beach Cleanup Event',
+        description: 'Join our weekend beach cleanup! Focus on plastic waste and organic debris.',
+        location: 'Sunset Beach, Pier Area',
+        reward: 200,
+        status: 'open',
+        createdAt: '2026-06-07T00:00:00Z',
+        mcclawId: null
+      }
+    ];
+    
+    this.mcclawTasks = [
+      {
+        id: 'f2b09868-7bf2-47e5-a90d-b148dcf68e5e',
+        title: 'Trash Pickup Test - Central Park',
+        description: 'Clean up trash in designated area. Submit 4 photos as proof.',
+        location: 'Central Park',
+        reward: '500 MCLAW',
+        status: 'funded',
+        escrow_amount: '0.5 MCLAW',
+        agent_wallet: '0xd1aa...c7ee'
+      }
+    ];
+    
+    this.proofs = [];
     this.init();
   }
 
-  async init() {
-    await this.loadTasks();
+  init() {
     this.setupEventListeners();
     this.render();
   }
 
-  // API Calls
-  async api(endpoint, options = {}) {
-    try {
-      const response = await fetch(`${this.apiUrl}${endpoint}`, {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers
-        }
+  setupEventListeners() {
+    document.querySelectorAll('[data-action]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.handleAction(el.dataset.action);
       });
-      return await response.json();
-    } catch (error) {
-      console.error('API Error:', error);
-      return { error: error.message };
-    }
-  }
-
-  async loadTasks() {
-    const result = await this.api('/api/tasks');
-    if (result.tasks) {
-      this.tasks = result.tasks;
-    }
-  }
-
-  async loadMcClawTasks() {
-    const result = await this.api('/api/mcclaw/tasks');
-    if (result.tasks) {
-      return result.tasks;
-    }
-    return [];
-  }
-
-  // Task Operations
-  async createTask(taskData) {
-    const result = await this.api('/api/tasks', {
-      method: 'POST',
-      body: JSON.stringify(taskData)
     });
-    if (result.success) {
-      await this.loadTasks();
-      this.showNotification('Task created successfully!', 'success');
-      return result.task;
-    }
-    this.showNotification(result.error || 'Failed to create task', 'error');
-    return null;
   }
 
-  async submitProof(taskId, proofData) {
-    const result = await this.api(`/api/tasks/${taskId}/submit`, {
-      method: 'POST',
-      body: JSON.stringify(proofData)
-    });
-    if (result.success) {
-      this.showNotification('Proof submitted! Awaiting validation.', 'success');
-      return result.proof;
+  handleAction(action) {
+    switch(action) {
+      case 'create-task':
+        this.showCreateTaskModal();
+        break;
+      case 'view-tasks':
+        this.navigateTo('tasks');
+        break;
+      case 'view-mcclaw':
+        this.navigateTo('mcclaw');
+        break;
+      case 'submit-proof':
+        this.showSubmitProofModal(this.tasks[0]?.id);
+        break;
     }
-    this.showNotification(result.error || 'Failed to submit proof', 'error');
-    return null;
   }
 
-  // UI Helpers
+  navigateTo(view) {
+    this.currentView = view;
+    this.render();
+  }
+
   showNotification(message, type = 'info') {
     const container = document.getElementById('notifications') || this.createNotificationContainer();
     const notification = document.createElement('div');
@@ -97,56 +102,47 @@ class TrashBankApp {
     return container;
   }
 
-  setupEventListeners() {
-    // Navigation
-    document.querySelectorAll('[data-action]').forEach(el => {
-      el.addEventListener('click', (e) => {
-        e.preventDefault();
-        const action = el.dataset.action;
-        this.handleAction(action);
-      });
-    });
+  createTask(taskData) {
+    const task = {
+      id: `tb_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      ...taskData,
+      status: 'open',
+      createdAt: new Date().toISOString()
+    };
+    this.tasks.push(task);
+    this.showNotification('Task created successfully!', 'success');
+    this.navigateTo('tasks');
+    return task;
   }
 
-  handleAction(action) {
-    switch(action) {
-      case 'create-task':
-        this.showCreateTaskModal();
-        break;
-      case 'view-tasks':
-        this.navigateTo('tasks');
-        break;
-      case 'view-mcclaw':
-        this.navigateTo('mcclaw');
-        break;
-      case 'submit-proof':
-        this.showSubmitProofModal();
-        break;
-    }
+  submitProof(taskId, proofData) {
+    const proof = {
+      id: `proof_${Date.now()}`,
+      taskId,
+      ...proofData,
+      status: 'pending_validation',
+      submittedAt: new Date().toISOString()
+    };
+    this.proofs.push(proof);
+    
+    const task = this.tasks.find(t => t.id === taskId);
+    if (task) task.status = 'pending_validation';
+    
+    this.showNotification('Proof submitted! Awaiting validation.', 'success');
+    return proof;
   }
 
-  navigateTo(view) {
-    this.currentView = view;
-    this.render();
-  }
-
-  // Modals
   showCreateTaskModal() {
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.innerHTML = `
       <div class="modal-content">
-        <h2>Create Cleanup Task</h2>
+        <h2>🆕 Create Cleanup Task</h2>
         <form id="create-task-form">
-          <input type="text" name="title" placeholder="Task Title" required>
+          <input type="text" name="title" placeholder="Task Title *" required>
           <textarea name="description" placeholder="Describe the cleanup task..." rows="3"></textarea>
           <input type="text" name="location" placeholder="Location (e.g., Central Park)">
           <input type="number" name="reward" placeholder="Reward (Trash Coins)" value="100">
-          <small>GPS coordinates (optional)</small>
-          <div class="coords-row">
-            <input type="number" step="any" name="lat" placeholder="Latitude">
-            <input type="number" step="any" name="lng" placeholder="Longitude">
-          </div>
           <div class="modal-actions">
             <button type="submit" class="btn btn-primary">Create Task</button>
             <button type="button" class="btn btn-secondary" onclick="this.closest('.modal').remove()">Cancel</button>
@@ -156,37 +152,29 @@ class TrashBankApp {
     `;
     document.body.appendChild(modal);
     
-    modal.querySelector('form').addEventListener('submit', async (e) => {
+    modal.querySelector('form').addEventListener('submit', (e) => {
       e.preventDefault();
       const form = e.target;
-      const taskData = {
+      this.createTask({
         title: form.title.value,
-        description: form.description.value,
-        location: form.location.value,
-        reward: parseInt(form.reward.value) || 100,
-        coordinates: form.lat.value && form.lng.value ? {
-          lat: parseFloat(form.lat.value),
-          lng: parseFloat(form.lng.value)
-        } : undefined
-      };
-      const task = await this.createTask(taskData);
-      if (task) {
-        modal.remove();
-        this.navigateTo('tasks');
-      }
+        description: form.description.value || 'Community cleanup task',
+        location: form.location.value || 'Community Area',
+        reward: parseInt(form.reward.value) || 100
+      });
+      modal.remove();
     });
   }
 
   showSubmitProofModal(taskId) {
+    const task = this.tasks.find(t => t.id === taskId) || this.tasks[0];
     const modal = document.createElement('div');
     modal.className = 'modal';
     modal.innerHTML = `
       <div class="modal-content">
-        <h2>Submit Proof of Work</h2>
-        <p class="proof-instructions">Upload 4 photos: Before, Collected, After, Disposal</p>
+        <h2>📸 Submit Proof of Work</h2>
+        ${task ? `<p class="task-info">Task: ${task.title}</p>` : ''}
+        <p class="proof-instructions">Upload 4 photos to verify your work</p>
         <form id="submit-proof-form">
-          <input type="hidden" name="taskId" value="${taskId}">
-          <input type="text" name="workerId" placeholder="Your Worker ID" value="worker_demo">
           <div class="photo-grid">
             <label class="photo-upload">
               <span>📷 Before</span>
@@ -215,24 +203,20 @@ class TrashBankApp {
     `;
     document.body.appendChild(modal);
     
-    modal.querySelector('form').addEventListener('submit', async (e) => {
+    modal.querySelector('form').addEventListener('submit', (e) => {
       e.preventDefault();
-      // Demo mode - simulate photo URLs
-      const proofData = {
-        workerId: 'worker_demo',
+      this.submitProof(taskId, {
+        workerId: 'demo_user',
         photos: ['before.jpg', 'collected.jpg', 'after.jpg', 'disposal.jpg'],
         notes: e.target.notes.value
-      };
-      const proof = await this.submitProof(taskId, proofData);
-      if (proof) {
-        modal.remove();
-      }
+      });
+      modal.remove();
     });
   }
 
-  // Render
   render() {
     const main = document.querySelector('main') || document.createElement('main');
+    main.innerHTML = '';
     
     switch(this.currentView) {
       case 'tasks':
@@ -240,14 +224,6 @@ class TrashBankApp {
         break;
       case 'mcclaw':
         main.innerHTML = this.renderMcClawView();
-        this.loadMcClawTasks().then(tasks => {
-          const container = document.getElementById('mcclaw-tasks');
-          if (container) {
-            container.innerHTML = tasks.length > 0 
-              ? tasks.map(t => this.renderTaskCard(t)).join('')
-              : '<p>No McClaw tasks found</p>';
-          }
-        });
         break;
       default:
         main.innerHTML = this.renderHomeView();
@@ -268,19 +244,45 @@ class TrashBankApp {
           <p>Experience the cleanup economy in action</p>
           
           <div class="action-cards">
-            <div class="action-card" onclick="app.navigateTo('tasks')">
+            <div class="action-card" data-action="view-tasks">
               <h3>📋 View Tasks</h3>
               <p>Browse cleanup tasks and earn rewards</p>
               <span class="badge">${this.tasks.length} Available</span>
             </div>
-            <div class="action-card" onclick="app.navigateTo('mcclaw')">
+            <div class="action-card" data-action="view-mcclaw">
               <h3>🔗 McClaw Tasks</h3>
-              <p>See live tasks from McClaw integration</p>
-              <span class="badge">Live</span>
+              <p>See live tasks fromMcClaw integration</p>
+              <span class="badge live">Live</span>
             </div>
-            <div class="action-card" data-action="create-task">
+            <div class="action-card"data-action="create-task">
               <h3>➕ Create Task</h3>
               <p>Post a cleanup task for your community</p>
+            </div>
+          </div>
+          
+          <div class="how-it-works">
+            <h3>How It Works</h3>
+            <div class="steps">
+              <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-title">Find a Task</span>
+                <p>Browse available cleanup tasks in your area</p>
+              </div>
+              <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-title">Complete the Work</span>
+                <p>Clean up the designated area</p>
+              </div>
+              <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-title">Submit Proof</span>
+                <p>4 photos: before, collected, after, disposal</p>
+              </div>
+              <div class="step">
+                <span class="step-number">4</span>
+                <span class="step-title">Earn Rewards</span>
+                <p>Trash Coins + Garbage Cans (karma)</p>
+              </div>
             </div>
           </div>
         </div>
@@ -292,7 +294,7 @@ class TrashBankApp {
     return `
       <section class="tasks-section">
         <div class="container">
-          <button class="btn btn-secondary" onclick="app.navigateTo('home')">← Back</button>
+          <button class="btn btn-secondary" onclick="app.navigateTo('home')">← Back to Home</button>
           <h2>Cleanup Tasks</h2>
           
           <div class="tasks-header">
@@ -301,10 +303,7 @@ class TrashBankApp {
           </div>
           
           <div class="tasks-list">
-            ${this.tasks.length > 0 
-              ? this.tasks.map(t => this.renderTaskCard(t)).join('')
-              : this.renderEmptyTasks()
-            }
+            ${this.tasks.map(t => this.renderTaskCard(t)).join('')}
           </div>
         </div>
       </section>
@@ -315,17 +314,41 @@ class TrashBankApp {
     return `
       <section class="mcclaw-section">
         <div class="container">
-          <button class="btn btn-secondary" onclick="app.navigateTo('home')">← Back</button>
-          <h2>McClaw Integration</h2>
-          <p class="subtitle">Live tasks from McClaw.io API</p>
+          <button class="btn btn-secondary" onclick="app.navigateTo('home')">← Back to Home</button>
+          <h2>🔗 McClaw Integration</h2>
+          <p class="subtitle">Live tasks from McClaw.io platform</p>
           
           <div class="integration-highlight">
             <h3>✅ Connected to McClaw API</h3>
-            <p>Tasks below are fetched live from the McClaw platform</p>
+            <p>Tasks below are fetched from the real McClaw platform (test data)</p>
           </div>
           
-          <div id="mcclaw-tasks" class="tasks-list">
-            <p>Loading...</p>
+          <div class="mcclaw-tasks-list">
+            ${this.mcclawTasks.map(t => `
+              <div class="task-card mcclaw-card">
+                <div class="task-header">
+                  <h3>${this.escapeHtml(t.title)}</h3>
+                  <span class="task-status status-${t.status}">${t.status}</span>
+                </div>
+                <p class="task-description">${this.escapeHtml(t.description)}</p>
+                <div class="task-meta">
+                  <span>📍 ${this.escapeHtml(t.location)}</span>
+                  <span>💰 ${t.reward}</span>
+                  <span class="mcclaw-badge">🔗 McClaw</span>
+                </div>
+                <div class="task-footer">
+                  <span>Escrow: ${t.escrow_amount}</span>
+                  <span>Agent: ${t.agent_wallet}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="api-info">
+            <h4>McClaw API Integration</h4>
+            <p>This demo shows real McClaw task structure. In production, tasks are fetched live via API.</p>
+            <code>GET/ POST /api/v1/tasks</code>
+            <code>Webhook: ApplicationReceived, TaskCompleted</code>
           </div>
         </div>
       </section>
@@ -334,9 +357,7 @@ class TrashBankApp {
 
   renderTaskCard(task) {
     const status = task.status || 'open';
-    const statusClass = status === 'open' ? 'status-open' : 
-                        status === 'pending_validation' ? 'status-pending' : 
-                        'status-completed';
+    const statusClass = `status-${status}`;
     
     return `
       <div class="task-card ${statusClass}">
@@ -348,23 +369,14 @@ class TrashBankApp {
         <div class="task-meta">
           <span>📍 ${this.escapeHtml(task.location || 'Unknown')}</span>
           <span>💰 ${task.reward || 100} Coins</span>
-          ${task.mcclawId ? '<span class="mcclaw-badge">🔗 McClaw</span>' : ''}
         </div>
         ${status === 'open' ? `
-          <button class="btn btn-primary" onclick="app.showSubmitProofModal('${task.id}')">
-            Submit Proof
-          </button>
+          <div class="task-actions">
+            <button class="btn btn-primary" onclick="app.showSubmitProofModal('${task.id}')">
+              Submit Proof
+            </button>
+          </div>
         ` : ''}
-      </div>
-    `;
-  }
-
-  renderEmptyTasks() {
-    return `
-      <div class="empty-state">
-        <h3>No tasks yet</h3>
-        <p>Be the first to create a cleanup task!</p>
-        <button class="btn btn-primary" data-action="create-task">Create Task</button>
       </div>
     `;
   }
@@ -381,154 +393,7 @@ class TrashBankApp {
   }
 }
 
-// Styles
-const styles = document.createElement('style');
-styles.textContent = `
-  /* App Styles */
-  main { min-height: calc(100vh - 200px); padding: 20px; }
-  
-  .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-  
-  .demo-section { background: linear-gradient(135deg, rgba(0,255,136,0.05) 0%, transparent 100%); padding: 60px 20px; }
-  
-  .action-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 40px; }
-  
-  .action-card {
-    background: var(--bg-card, #0d0d0d);
-    border: 1px solid var(--border, #1f1f1f);
-    border-radius: 20px;
-    padding: 32px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .action-card:hover {
-    border-color: var(--accent, #00ff88);
-    transform: translateY(-4px);
-  }
-  .action-card h3 { font-size: 20px; margin-bottom: 12px; color: #fff; }
-  .action-card p { color: var(--text-secondary, #a3a3a3); font-size: 14px; }
-  .badge { 
-    display: inline-block; 
-    background: var(--accent, #00ff88); 
-    color: #000; 
-    padding: 4px 12px; 
-    border-radius: 100px; 
-    font-size: 12px; 
-    font-weight: 600; 
-    margin-top: 16px; 
-  }
-  
-  /* Tasks */
-  .tasks-section { padding: 40px 20px; }
-  .tasks-header { display: flex; justify-content: space-between; align-items: center; margin: 32px 0; }
-  
-  .task-card {
-    background: var(--bg-card, #0d0d0d);
-    border: 1px solid var(--border, #1f1f1f);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 16px;
-  }
-  .task-card:hover { border-color: var(--accent, #00ff88); }
-  
-  .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-  .task-header h3 { font-size: 18px; color: #fff; margin: 0; }
-  
-  .task-status { 
-    font-size: 11px; 
-    padding: 4px 10px; 
-    border-radius: 100px; 
-    text-transform: uppercase; 
-    font-weight: 600; 
-  }
-  .status-open { background: rgba(0,255,136,0.2); color: #00ff88; }
-  .status-pending { background: rgba(255,170,0,0.2); color: #ffaa00; }
-  .status-completed { background: rgba(100,100,100,0.2); color: #888; }
-  
-  .task-description { color: var(--text-secondary, #a3a3a3); font-size: 14px; margin-bottom: 16px; }
-  .task-meta { display: flex; gap: 16px; font-size: 13px; color: var(--text-muted, #525252); }
-  .mcclaw-badge { background: rgba(0,255,136,0.1); color: #00ff88; padding: 2px 8px; border-radius: 4px; }
-  
-  /* Modal */
-  .modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 10000; padding: 20px;
-  }
-  .modal-content {
-    background: var(--bg-card, #0d0d0d);
-    border: 1px solid var(--border, #1f1f1f);
-    border-radius: 24px; padding: 32px;
-    max-width: 500px; width: 100%;
-    max-height: 90vh; overflow-y: auto;
-  }
-  .modal-content h2 { margin-bottom: 24px; }
-  .modal-content input, .modal-content textarea {
-    width: 100%; padding: 12px 16px;
-    background: var(--bg-dark, #050505);
-    border: 1px solid var(--border, #1f1f1f);
-    border-radius: 12px; color: #fff;
-    font-size: 14px; margin-bottom: 16px;
-  }
-  .modal-content input:focus, .modal-content textarea:focus {
-    outline: none; border-color: var(--accent, #00ff88);
-  }
-  .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
-  
-  .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
-  .photo-upload {
-    border: 2px dashed var(--border, #1f1f1f);
-    border-radius: 12px; padding: 20px;
-    text-align: center; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .photo-upload:hover { border-color: var(--accent, #00ff88); }
-  .photo-upload input { display: none; }
-  .photo-upload span { font-size: 32px; }
-  
-  /* Notifications */
-  .notification {
-    background: var(--bg-card, #0d0d0d);
-    border: 1px solid var(--border, #1f1f1f);
-    border-radius: 12px; padding: 16px 20px;
-    display: flex; align-items: center; gap: 12px;
-    animation: slideIn 0.3s ease;
-  }
-  .notification-success { border-color: var(--accent, #00ff88); }
-  .notification-error { border-color: #ff4444; }
-  @keyframes slideIn { from { transform: translateX(100%); } }
-  
-  .btn-primary {
-    background: var(--accent, #00ff88);
-    color: #000;
-    border: none;
-  }
-  .btn-secondary {
-    background: transparent;
-    color: #fff;
-    border: 1px solid var(--border, #1f1f1f);
-  }
-  
-  .empty-state { text-align: center; padding: 60px 20px; }
-  .empty-state h3 { margin-bottom: 12px; color: #fff; }
-  .empty-state p { color: var(--text-secondary, #a3a3a3); margin-bottom: 24px; }
-  
-  .integration-highlight {
-    background: rgba(0,255,136,0.1);
-    border: 1px solid var(--accent, #00ff88);
-    border-radius: 16px;
-    padding: 24px;
-    text-align: center;
-    margin: 24px 0;
-  }
-  .integration-highlight h3 { color: var(--accent, #00ff88); margin-bottom: 8px; }
-  
-  @media (max-width: 600px) {
-    .photo-grid { grid-template-columns: 1fr; }
-    .action-cards { grid-template-columns: 1fr; }
-  }
-`;
-document.head.appendChild(styles);
-
-// Init app
-const app = new TrashBankApp();
+// Initialize app when DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  window.app = new TrashBankApp();
+});
