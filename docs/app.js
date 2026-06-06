@@ -1,9 +1,7 @@
 // Trash Bank Frontend - Interactive Demo
 class TrashBankApp {
   constructor() {
-    this.apiUrl = window.location.hostname === 'gitnjiiggy.github.io' 
-      ? 'https://80.241.212.30:3001' // Production API (need to expose)
-      : 'http://localhost:3001';
+    this.apiUrl = 'https://80.241.212.30:3001'; // Production API
     this.currentView = 'home';
     this.tasks = [];
     this.init();
