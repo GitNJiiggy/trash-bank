@@ -2,7 +2,6 @@
 class TrashBankApp {
   constructor() {
     this.currentView = 'home';
-    // Mock data for demo
     this.tasks = [
       {
         id: 'tb_demo_1',
@@ -11,8 +10,7 @@ class TrashBankApp {
         location: 'Main Street Park, Downtown',
         reward: 150,
         status: 'open',
-        createdAt: '2026-06-07T00:00:00Z',
-        mcclawId: null
+        createdAt: '2026-06-07T00:00:00Z'
       },
       {
         id: 'tb_demo_2', 
@@ -21,59 +19,29 @@ class TrashBankApp {
         location: 'Sunset Beach, Pier Area',
         reward: 200,
         status: 'open',
-        createdAt: '2026-06-07T00:00:00Z',
-        mcclawId: null
+        createdAt: '2026-06-07T00:00:00Z'
       }
     ];
     
-  // McClaw Tasks - fetched from API in production, static demo data as fallback
-  async loadMcClawTasksFromAPI() {
-    try {
-      const response = await fetch('https://mcclaw.io/api/v1/tasks', {
-        headers: { 'X-API-Key': 'demo' }
-      });
-      const data = await response.json();
-      if (data.tasks && data.tasks.length > 0) {
-        this.mcclawTasks = data.tasks.map(t => ({
-          id: t.id,
-          title: t.title,
-          description: t.description,
-          location: 'McClaw Task',
-          reward: t.escrow_amount ? (parseInt(t.escrow_amount) / 1e18).toFixed(2) + ' MCLAW' : 'Variable',
-          status: t.status,
-          escrow_amount: t.escrow_amount ? (parseInt(t.escrow_amount) / 1e18).toFixed(2) + ' MCLAW' : 'N/A',
-          agent_wallet: t.agent_wallet_address ? t.agent_wallet_address.slice(0, 6) + '...' + t.agent_wallet_address.slice(-4) : 'N/A'
-        }));
-        this.render();
+    this.mcclawTasks = [
+      {
+        id: 'f2b09868-7bf2-47e5-a90d-b148dcf68e5e',
+        title: 'Trash Pickup Test - Central Park',
+        description: 'Clean up trash in designated area. Submit 4 photos as proof.',
+        location: 'Central Park',
+        reward: '0.5 MCLAW',
+        status: 'funded',
+        escrow_amount: '0.5 MCLAW',
+        agent_wallet: '0xd1aa...c7ee'
       }
-    } catch (e) {
-      console.log('McClaw API not available, using demo data');
-    }
-  }
-
-  // Static demo McClaw task (from real McClaw test task)
-  mcclawTasks = [
-    {
-      id: 'f2b09868-7bf2-47e5-a90d-b148dcf68e5e',
-      title: 'Trash Pickup Test - Central Park',
-      description: 'Clean up trash in designated area. Submit 4 photos as proof: 1) Before photo of area, 2) Photo of trash collected, 3) After photo of clean area, 4) Photo of trash properly disposed. GPS and timestamp will be verified.',
-      location: 'Central Park',
-      reward: '0.5 MCLAW',
-      status: 'funded',
-      escrow_amount: '0.5 MCLAW',
-      agent_wallet: '0xd1aa...c7ee'
-    }
-  ];
+    ];
     
-    this.proofs = [];
     this.init();
   }
 
   init() {
     this.setupEventListeners();
     this.render();
-    // Try to load live McClaw tasks (falls back to demo data)
-    this.loadMcClawTasksFromAPI();
   }
 
   setupEventListeners() {
@@ -111,10 +79,7 @@ class TrashBankApp {
     const container = document.getElementById('notifications') || this.createNotificationContainer();
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-      <span>${message}</span>
-      <button onclick="this.parentElement.remove()">×</button>
-    `;
+    notification.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()">×</button>`;
     container.appendChild(notification);
     setTimeout(() => notification.remove(), 5000);
   }
@@ -122,10 +87,7 @@ class TrashBankApp {
   createNotificationContainer() {
     const container = document.createElement('div');
     container.id = 'notifications';
-    container.style.cssText = `
-      position: fixed; top: 80px; right: 20px; z-index: 9999;
-      display: flex; flex-direction: column; gap: 10px;
-    `;
+    container.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;';
     document.body.appendChild(container);
     return container;
   }
@@ -151,11 +113,8 @@ class TrashBankApp {
       status: 'pending_validation',
       submittedAt: new Date().toISOString()
     };
-    this.proofs.push(proof);
-    
     const task = this.tasks.find(t => t.id === taskId);
     if (task) task.status = 'pending_validation';
-    
     this.showNotification('Proof submitted! Awaiting validation.', 'success');
     return proof;
   }
@@ -204,22 +163,10 @@ class TrashBankApp {
         <p class="proof-instructions">Upload 4 photos to verify your work</p>
         <form id="submit-proof-form">
           <div class="photo-grid">
-            <label class="photo-upload">
-              <span>📷 Before</span>
-              <input type="file" accept="image/*" name="photo1">
-            </label>
-            <label class="photo-upload">
-              <span>🗑️ Collected</span>
-              <input type="file" accept="image/*" name="photo2">
-            </label>
-            <label class="photo-upload">
-              <span>✨ After</span>
-              <input type="file" accept="image/*" name="photo3">
-            </label>
-            <label class="photo-upload">
-              <span>♻️ Disposal</span>
-              <input type="file" accept="image/*" name="photo4">
-            </label>
+            <label class="photo-upload"><span>📷 Before</span><input type="file" accept="image/*" name="photo1"></label>
+            <label class="photo-upload"><span>🗑️ Collected</span><input type="file" accept="image/*" name="photo2"></label>
+            <label class="photo-upload"><span>✨ After</span><input type="file" accept="image/*" name="photo3"></label>
+            <label class="photo-upload"><span>♻️ Disposal</span><input type="file" accept="image/*" name="photo4"></label>
           </div>
           <textarea name="notes" placeholder="Notes (optional)" rows="2"></textarea>
           <div class="modal-actions">
@@ -279,10 +226,10 @@ class TrashBankApp {
             </div>
             <div class="action-card" data-action="view-mcclaw">
               <h3>🔗 McClaw Tasks</h3>
-              <p>See live tasks fromMcClaw integration</p>
+              <p>See live tasks from McClaw integration</p>
               <span class="badge live">Live</span>
             </div>
-            <div class="action-card"data-action="create-task">
+            <div class="action-card" data-action="create-task">
               <h3>➕ Create Task</h3>
               <p>Post a cleanup task for your community</p>
             </div>
