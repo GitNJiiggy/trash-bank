@@ -23,7 +23,7 @@
         }
         body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text-primary); line-height: 1.6; }
         
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 80px 20px 40px; position: relative; overflow: hidden; }
+        .hero { min-height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 80px 20px 60px; position: relative; overflow: visible; }
         .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.2) 0%, transparent 60%); }
         .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, var(--bg-dark), transparent); }
         
@@ -184,16 +184,19 @@
         .footer-text { color: var(--text-muted); font-size: 14px; }
         
         /* App Styles */
-        main { min-height: calc(100vh - 200px); }
+        main { min-height: calc(100vh - 200px); display: block; clear: both; position: relative; z-index: 1; }
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
         .demo-section { 
             background: linear-gradient(180deg, rgba(0,255,136,0.08) 0%, rgba(5,5,5,0.95) 100%); 
             border-radius: 0; 
             padding: 100px 40px; 
-            margin: 0 auto; 
-            position: relative;
-            border-top: 1px solid rgba(0,255,136,0.3);
+            margin: 0; 
+            position: relative; 
+            border-top: 1px solid rgba(0,255,136,0.3); 
             border-bottom: 1px solid rgba(0,255,136,0.1);
+            display: block;
+            visibility: visible;
+            width: 100%;
         }
         .demo-section::before { 
             content: ''; 
