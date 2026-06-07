@@ -361,8 +361,11 @@ app.get('*', (req, res) => {
   }
 });
 
-// Only listen on non-Vercel environments
-if (!isVercel) {
+// Vercel serverless export
+export default app;
+
+// Only listen on non-Vercel environments (local development)
+if (process.env.VERCEL !== '1') {
   app.listen(PORT, () => {
     console.log(`🗑️ Trash Bank API running on port ${PORT}`);
     console.log(`📊 Health: http://localhost:${PORT}/api/health`);

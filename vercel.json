@@ -1,4 +1,6 @@
 {
+  "buildCommand": "cd backend && npm install",
+  "outputDirectory": "docs",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -8,5 +10,10 @@
       "source": "/(.*)",
       "destination": "/docs/$1"
     }
-  ]
+  ],
+  "functions": {
+    "backend/server.js": {
+      "runtime": "nodejs22.x"
+    }
+  }
 }
