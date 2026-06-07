@@ -52,10 +52,40 @@
         .nav-link:hover { color: var(--accent); }
         
         /* Section styling */
-        .section { padding: 120px 32px; max-width: 1200px; margin: 0 auto; }
-        .section-header { text-align: center; margin-bottom: 64px; }
+        .section { 
+            padding: 100px 32px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            position: relative;
+        }
+        .section:nth-child(even) {
+            background: linear-gradient(180deg, transparent 0%, rgba(0,255,136,0.02) 50%, transparent 100%);
+        }
+        .section-header { 
+            text-align: center; 
+            margin-bottom: 80px; 
+            position: relative;
+        }
+        .section-header::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 24px auto 0;
+            border-radius: 3px;
+        }
         .section-tag { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 16px; display: inline-block; padding: 8px 16px; background: rgba(0,255,136,0.1); border-radius: 100px; }
-        .section-title { font-size: clamp(32px, 5vw, 56px); font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+        .section-title { 
+            font-size: clamp(36px, 5vw, 64px); 
+            font-weight: 900; 
+            margin-bottom: 20px; 
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
         .section-desc { font-size: 18px; color: var(--text-secondary); max-width: 700px; margin: 0 auto; }
         
         .section-dark { background: var(--bg-card); }
@@ -63,7 +93,21 @@
         .section-split.reverse { direction: rtl; }
         .section-split.reverse > * { direction: ltr; }
         
-        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 auto; max-width: 800px; }
+        .section-divider { 
+            height: 120px; 
+            background: radial-gradient(ellipse at 50% 50%, rgba(0,255,136,0.08) 0%, transparent 70%); 
+            margin: 0; 
+            position: relative;
+        }
+        .section-divider::before {
+            content: '◆';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--accent);
+            opacity: 0.3;
+            font-size: 24px;
+        }
         
         /* Cards */
         .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
@@ -226,14 +270,64 @@
         @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,136,0.4); } 50% { opacity: 0.9; box-shadow: 0 0 0 15px rgba(0,255,136,0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,136,0.4); } 50% { opacity: 0.8; box-shadow: 0 0 0 10px rgba(0,255,136,0); } }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .how-it-works { margin-top: 60px; padding: 40px; background: rgba(0,0,0,0.3); border-radius: 24px; }
-        .how-it-works h3 { text-align: center; margin-bottom: 32px; font-size: 28px; color: var(--text-primary); }
-        .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
-        .step { text-align: center; padding: 24px; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border); transition: all 0.3s; }
-        .step:hover { border-color: var(--accent); transform: translateY(-4px); }
-        .step-number { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%); color: #000; border-radius: 50%; font-weight: 800; margin-bottom: 16px; font-size: 24px; box-shadow: 0 8px 24px rgba(0,255,136,0.3); }
-        .step-title { font-weight: 700; margin-bottom: 8px; font-size: 18px; color: var(--text-primary); }
-        .step p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+        .how-it-works { 
+            margin-top: 80px; 
+            padding: 60px 40px; 
+            background: linear-gradient(180deg, rgba(20,20,20,1) 0%, rgba(5,5,5,1) 100%); 
+            border-radius: 32px; 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .how-it-works h3 { 
+            text-align: center; 
+            margin-bottom: 48px; 
+            font-size: 32px; 
+            color: var(--text-primary);
+            font-weight: 800;
+        }
+        .steps { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 24px; 
+        }
+        .step { 
+            text-align: center; 
+            padding: 32px 24px; 
+            background: var(--bg-dark); 
+            border-radius: 20px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: all 0.4s;
+            position: relative;
+        }
+        .step:hover { 
+            border-color: rgba(0,255,136,0.3); 
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,255,136,0.1);
+        }
+        .step-number { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 72px; 
+            height: 72px; 
+            background: linear-gradient(135deg, var(--accent) 0%, #00cc6a 100%); 
+            color: #000; 
+            border-radius: 50%; 
+            font-weight: 900; 
+            margin-bottom: 20px; 
+            font-size: 28px;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.4); 
+        }
+        .step-title { 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            font-size: 20px; 
+            color: var(--text-primary);
+        }
+        .step p { 
+            font-size: 15px; 
+            color: var(--text-secondary); 
+            line-height: 1.7;
+        }
         
         /* Tasks */
         .tasks-section, .mcclaw-section { padding: 60px 20px; background: var(--bg-card); border-radius: 32px; margin: 40px auto; max-width: 1000px; }
