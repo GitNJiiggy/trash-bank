@@ -26,18 +26,44 @@ class TrashBankApp {
       }
     ];
     
-    this.mcclawTasks = [
-      {
-        id: 'f2b09868-7bf2-47e5-a90d-b148dcf68e5e',
-        title: 'Trash Pickup Test - Central Park',
-        description: 'Clean up trash in designated area. Submit 4 photos as proof.',
-        location: 'Central Park',
-        reward: '500 MCLAW',
-        status: 'funded',
-        escrow_amount: '0.5 MCLAW',
-        agent_wallet: '0xd1aa...c7ee'
+  // McClaw Tasks - fetched from API in production, static demo data as fallback
+  async loadMcClawTasksFromAPI() {
+    try {
+      const response = await fetch('https://mcclaw.io/api/v1/tasks', {
+        headers: { 'X-API-Key': 'demo' }
+      });
+      const data = await response.json();
+      if (data.tasks && data.tasks.length > 0) {
+        this.mcclawTasks = data.tasks.map(t => ({
+          id: t.id,
+          title: t.title,
+          description: t.description,
+          location: 'McClaw Task',
+          reward: t.escrow_amount ? (parseInt(t.escrow_amount) / 1e18).toFixed(2) + ' MCLAW' : 'Variable',
+          status: t.status,
+          escrow_amount: t.escrow_amount ? (parseInt(t.escrow_amount) / 1e18).toFixed(2) + ' MCLAW' : 'N/A',
+          agent_wallet: t.agent_wallet_address ? t.agent_wallet_address.slice(0, 6) + '...' + t.agent_wallet_address.slice(-4) : 'N/A'
+        }));
+        this.render();
       }
-    ];
+    } catch (e) {
+      console.log('McClaw API not available, using demo data');
+    }
+  }
+
+  // Static demo McClaw task (from real McClaw test task)
+  mcclawTasks = [
+    {
+      id: 'f2b09868-7bf2-47e5-a90d-b148dcf68e5e',
+      title: 'Trash Pickup Test - Central Park',
+      description: 'Clean up trash in designated area. Submit 4 photos as proof: 1) Before photo of area, 2) Photo of trash collected, 3) After photo of clean area, 4) Photo of trash properly disposed. GPS and timestamp will be verified.',
+      location: 'Central Park',
+      reward: '0.5 MCLAW',
+      status: 'funded',
+      escrow_amount: '0.5 MCLAW',
+      agent_wallet: '0xd1aa...c7ee'
+    }
+  ];
     
     this.proofs = [];
     this.init();
@@ -46,6 +72,8 @@ class TrashBankApp {
   init() {
     this.setupEventListeners();
     this.render();
+    // Try to load live McClaw tasks (falls back to demo data)
+    this.loadMcClawTasksFromAPI();
   }
 
   setupEventListeners() {

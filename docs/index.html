@@ -167,24 +167,26 @@
         .step p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
         
         /* Tasks */
-        .tasks-section, .mcclaw-section { padding: 40px 20px; }
-        .tasks-section h2, .mcclaw-section h2 { margin: 24px 0; }
-        .subtitle { color: var(--text-secondary); font-size: 18px; margin-bottom: 24px; }
-        .tasks-header { display: flex; justify-content: space-between; align-items: center; margin: 24px 0; }
-        .task-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 16px; transition: all 0.3s; }
-        .task-card:hover { border-color: var(--accent); }
-        .task-card.mcclaw-card { border-color: rgba(0,255,136,0.3); }
-        .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .task-header h3 { font-size: 18px; color: #fff; margin: 0; }
-        .task-status { font-size: 11px; padding: 4px 10px; border-radius: 100px; text-transform: uppercase; font-weight: 600; }
-        .status-open { background: rgba(0,255,136,0.2); color: #00ff88; }
-        .status-pending_validation, .status-pending { background: rgba(255,170,0,0.2); color: #ffaa00; }
-        .status-completed, .status-funded { background: rgba(100,100,100,0.2); color: #888; }
-        .task-description { color: var(--text-secondary); font-size: 14px; margin: 12px 0; }
-        .task-meta { display: flex; gap: 16px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; }
-        .task-footer { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-muted); display: flex; gap: 16px; }
-        .mcclaw-badge { background: rgba(0,255,136,0.1); color: #00ff88; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
-        .task-actions { margin-top: 16px; }
+        .tasks-section, .mcclaw-section { padding: 60px 20px; background: var(--bg-card); border-radius: 32px; margin: 40px auto; max-width: 1000px; }
+        .tasks-section h2, .mcclaw-section h2 { margin: 0 0 8px 0; font-size: 36px; }
+        .subtitle { color: var(--text-secondary); font-size: 18px; margin-bottom: 32px; }
+        .tasks-header { display: flex; justify-content: space-between; align-items: center; margin: 32px 0; padding: 20px; background: var(--bg-dark); border-radius: 16px; }
+        .task-card { background: var(--bg-dark); border: 2px solid var(--border); border-radius: 20px; padding: 28px; margin-bottom: 20px; transition: all 0.3s; position: relative; overflow: hidden; }
+        .task-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+        .task-card:hover { border-color: var(--accent); transform: translateX(8px); box-shadow: 0 12px 40px rgba(0,255,136,0.1); }
+        .task-card.mcclaw-card { border-color: rgba(0,255,136,0.4); }
+        .task-card.mcclaw-card::before { width: 6px; }
+        .task-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+        .task-header h3 { font-size: 20px; color: #fff; margin: 0; }
+        .task-status { font-size: 12px; padding: 6px 14px; border-radius: 100px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+        .status-open { background: rgba(0,255,136,0.15); color: var(--accent); }
+        .status-pending_validation, .status-pending { background: rgba(255,170,0,0.15); color: #ffaa00; }
+        .status-completed, .status-funded { background: rgba(150,150,150,0.15); color: #999; }
+        .task-description { color: var(--text-secondary); font-size: 15px; margin: 16px 0; line-height: 1.6; }
+        .task-meta { display: flex; gap: 20px; font-size: 14px; color: var(--text-muted); flex-wrap: wrap; }
+        .task-footer { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); display: flex; gap: 20px; }
+        .mcclaw-badge { background: rgba(0,255,136,0.15); color: var(--accent); padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+        .task-actions { margin-top: 20px; }
         
         /* Modal */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; }
@@ -351,7 +353,7 @@
             <div>
                 <h3 style="font-size: 28px; margin-bottom: 24px; font-weight: 800;">No Pre-Mine. No Team Allocation.</h3>
                 <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; font-size: 16px;">
-                    Trash Bank starts with 5% liquidity pool + 5% treasury. The remaining 90% must be earned through verified work. This is not "zero supply" — it's "zero free allocation." Everyone, including founders, must earn tokens through contribution.
+                    Trash Bank is a <strong>concept and prototype</strong> for the McClaw ecosystem. This demo shows the proposed workflow and token design. Smart contracts are written but not deployed. Integration with McClaw is implemented in code.
                 </p>
                 <div style="background: var(--bg-card); border-radius: 12px; padding: 20px; border: 1px solid var(--border);">
                     <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Initial Allocation</div>
@@ -495,43 +497,38 @@
         </div>
 
         <div style="margin-top: 48px;">
-            <h3 style="text-align: center; font-size: 24px; margin-bottom: 32px;">How We're Different</h3>
+            <h3 style="text-align: center; font-size: 24px; margin-bottom: 32px;">Planned Features (Concept)</h3>
+            <p style="color: var(--text-muted); text-align: center; margin-bottom: 24px; font-size: 14px;">This is a proposed design. Smart contracts written but not deployed.</p>
             <table class="comp-table">
                 <tr>
                     <th>Feature</th>
                     <th>Plastic Bank</th>
                     <th>ZeLoop</th>
-                    <th>Trash Bank</th>
+                    <th>Trash Bank (Proposed)</th>
                 </tr>
                 <tr>
                     <td>Governance</td>
                     <td class="no">None</td>
                     <td class="no">None</td>
-                    <td class="yes">DAO</td>
+                    <td>Proposed DAO</td>
                 </tr>
                 <tr>
                     <td>Tradeable Token</td>
                     <td class="no">No</td>
                     <td class="no">No</td>
-                    <td class="yes">Yes (TTKN)</td>
+                    <td>Proposed (TTKN)</td>
                 </tr>
                 <tr>
-                    <td>Homeless Inclusion</td>
-                    <td class="no">No</td>
-                    <td class="no">No</td>
-                    <td class="yes">Vending Cards</td>
-                </tr>
-                <tr>
-                    <td>Wallet Required</td>
-                    <td class="no">No</td>
+                    <td>Non-Crypto Access</td>
                     <td class="yes">Yes</td>
-                    <td class="yes">No</td>
+                    <td class="no">No</td>
+                    <td>Proposed (vending cards)</td>
                 </tr>
                 <tr>
                     <td>Waste Types</td>
                     <td>Plastic</td>
                     <td>Bottles</td>
-                    <td class="yes">All types</td>
+                    <td>All types</td>
                 </tr>
             </table>
         </div>
